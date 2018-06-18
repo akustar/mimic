@@ -23,8 +23,7 @@
   * SMI, SRT, VTT 등 자막 지원
   * ~~360° Video~~
   * ~~AirPlay, Chromecast~~
-* 웹 브라우저에 연결하기 위한 [WebTorrent](https://github.com/webtorrent/webtorrent)프로토콜 지원  
-  * 공유 링크를 통해 브라우저에서 쉽게 토렌트 
+* 웹 브라우저에 연결하기 위한 [WebTorrent](https://github.com/webtorrent/webtorrent)프로토콜 지원
 
 ※ 진행 상황: 60%
 
