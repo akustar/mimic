@@ -1,5 +1,5 @@
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   border-radius: 0px;
   background-color: transparent;
 }
@@ -9,7 +9,7 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 ::-webkit-scrollbar-track {
-  width: 10px;
+  width: 8px;
   border-radius: 0px;
   background-color: rgba(0, 0, 0, 0.1);
 }

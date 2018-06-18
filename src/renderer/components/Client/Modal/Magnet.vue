@@ -77,13 +77,13 @@
     height: auto;
   }
   .modal-header {
-    padding: 15px 12px;
+    padding: 15px;
   }
   .modal-body {
-    padding: 0 12px;
+    padding: 0 15px;
   }
   .modal-footer {
-    padding: 15px 12px 10px 12px;
+    padding: 15px 15px 10px;
   }
   .modal-body dl {
     margin-bottom: 0;

@@ -99,8 +99,12 @@
   }
   .detail .table table th:first-child,
   .detail .table table td:first-child {
-    padding-left: 13px;
+    padding-left: 15px;
   }
+  .detail .table table th:nth-child(2),
+  .detail .table table td:nth-child(2) {
+    padding-left: 3px;
+  }  
   .detail .table table th:last-child,
   .detail .table table td:last-child {
     padding-right: 15px;

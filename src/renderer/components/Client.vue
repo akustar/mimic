@@ -97,6 +97,7 @@
       // 프로그램 재시작시 연결되어있던 토렌트에 다시 연결합니다.
       reconnect() {
         const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
+
         for (const key in torrentSummary) {
           const { torrentFileName, posterFileName, selections, infoHash, path:downloadPath, } = torrentSummary[key]
           const torrentFilePath = torrentFileName ? path.join(config.TORRENT_PATH, torrentFileName) : ''
@@ -106,6 +107,8 @@
             const torrentId = !error ? torrentFilePath : infoHash
             ipcRenderer.send('wt-start-torrent', torrentId, downloadPath, key, selections, posterFilePath)
           })
+
+          this.progress.torrents.push(torrentSummary[key])
         }
       },
       ipc() {
@@ -195,7 +198,8 @@
         })
       },
       // 토렌트 파일 또는 시드 파일을 드래그 앤 드롭 합니다.
-      dragDropTorrent(files) {
+      dragDropTorrent(files, pos, fileList, directories) {
+        console.log(files, pos, fileList, directories)
         const tPaths = []
         const sPaths = []
 
@@ -218,7 +222,7 @@
         if (tPaths.length > 0) {
           this.parseTorrentFile(tPaths)
         }
-        
+
         // 시드 파일 업로드(시드 파일은 한번에 하나만 받겠습니다)
         if (sPaths.length > 0) {
           this.seedPath = sPaths[0]
