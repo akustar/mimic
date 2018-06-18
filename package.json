@@ -23,6 +23,7 @@
   "dependencies": {
     "application-config-path": "^0.1.0",
     "bitfield": "^2.0.0",
+    "count-files": "^2.6.2",
     "debounce": "^1.1.0",
     "drag-drop": "^4.2.0",
     "iconv-lite": "^0.4.23",

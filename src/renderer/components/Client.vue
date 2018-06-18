@@ -8,8 +8,8 @@
         <div id="addTorrent">
           <div class="dropdown">
             <button type="button" data-tippy-close="true" @click="addTorrentFile">토렌트 파일 추가</button>
-            <button type="button" data-tippy-close="true" @click="mdMagnetIsShow = true">토렌트 주소 추가</button>
-            <button type="button" data-tippy-close="true" @click="mdSeedIsShow = true">새 토렌트 만들기</button>
+            <button type="button" data-tippy-close="true" @click="magnetIsShow = true">토렌트 주소 추가</button>
+            <button type="button" data-tippy-close="true" @click="seedIsShow = true">새 토렌트 만들기</button>
           </div>
         </div>
       </div>
@@ -37,9 +37,9 @@
     <!-- 모달: 토렌트 파일 추가 -->
     <md-file v-if="parseResults.length > 0" :parseResults="parseResults"></md-file>
     <!-- 모달: 마그넷 추가 -->
-    <md-magnet v-if="mdMagnetIsShow" @close="mdMagnetIsShow = false" @loader="loader = true"></md-magnet>
+    <md-magnet v-if="magnetIsShow" @close="magnetIsShow = false" @loader="loader = true"></md-magnet>
     <!-- 모달: 시드 추가 -->
-    <md-seed v-if="mdSeedIsShow" @close="mdSeedIsShow = false"></md-seed>
+    <md-seed v-if="seedIsShow" :seedPath="seedPath" @close="seedIsShow = false"></md-seed>
 
     <transition name="opacity">
       <div class="overlay" v-if="loader">
@@ -78,8 +78,9 @@
         currentKey: '',
 
         loader: false,
-        mdSeedIsShow: false,
-        mdMagnetIsShow: false
+        seedPath: '',
+        seedIsShow: false,
+        magnetIsShow: false
       }
     },
     mounted() {
@@ -207,7 +208,22 @@
           }
         }
 
-        if (tPaths.length) this.parseTorrentFile(tPaths)
+        // 토렌트 파일과 시드 파일이 함께 드롭된 경우 토렌트 파일만 받겠습니다
+        if (tPaths.length > 0 && sPaths.length > 0) {
+          this.parseTorrentFile(tPaths)
+          return
+        }
+
+        // 토렌트 파일 업로드
+        if (tPaths.length > 0) {
+          this.parseTorrentFile(tPaths)
+        }
+        
+        // 시드 파일 업로드(시드 파일은 한번에 하나만 받겠습니다)
+        if (sPaths.length > 0) {
+          this.seedPath = sPaths[0]
+          this.seedIsShow = true
+        }
       },
       poster(posterFilePath) {
         if (posterFilePath) {

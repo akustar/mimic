@@ -24,6 +24,7 @@ const client = new WebTorrent({maxConns: 50})
 function init() {
   ipcRenderer.on('wt-parse-torrent', (event, ...args) => parseTorrentFile(...args))
   ipcRenderer.on('wt-start-torrent', (event, ...args) => startTorrent(...args))
+  ipcRenderer.on('wt-create-torrent', (event, ...args) => createTorrent(...args))
   ipcRenderer.on('wt-stop-torrent', (event, ...args) => stopTorrent(...args))
   ipcRenderer.on('wt-select-files', (event, ...args) => selectFiles(...args))
   ipcRenderer.on('wt-identifier-torrent', (event, ...args) => identifierTorrent(...args))
@@ -58,6 +59,14 @@ function startTorrent(torrentId, path, torrentKey, selections, posterFilePath = 
 
   addTorrentEvents(torrent)
   torrent.once('ready', () => selectFiles(torrent, selections))
+}
+
+function createTorrent(path, options) {
+  const torrent = client.seed(path, options)
+  torrent.key = options.torrentKey
+  torrent.selections = options.selections
+
+  addTorrentEvents(torrent) 
 }
 
 function addTorrentEvents(torrent) {

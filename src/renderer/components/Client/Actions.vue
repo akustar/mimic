@@ -38,6 +38,7 @@
 
 <script>
   import { ipcRenderer, shell, clipboard } from 'electron'
+  import fs from 'fs'
   import path from 'path'
 
   export default {
@@ -49,7 +50,16 @@
         const summary = torrentSummary[this.torrentKey]
         
         setTimeout(() => {
-          shell.showItemInFolder(path.join(summary.path, summary.name))
+          // 파일일때
+          const fullPath = path.join(summary.path, summary.name)
+          const stats = fs.lstatSync(fullPath)
+
+          if (stats.isDirectory()) {
+            shell.openExternal(fullPath)
+          }
+          else {
+            shell.showItemInFolder(fullPath)
+          }
         }, 10)
       },
       shareTorrent() {

@@ -7,6 +7,7 @@ function init(store, client, webTorrent, streaming) {
 
   // client -> webtorrent
   ipcMain.on('wt-start-torrent', (event, ...args) => webTorrent.win.webContents.send('wt-start-torrent', ...args))
+  ipcMain.on('wt-create-torrent', (event, ...args) => webTorrent.win.webContents.send('wt-create-torrent', ...args))
   ipcMain.on('wt-stop-torrent', (event, ...args) => webTorrent.win.webContents.send('wt-stop-torrent', ...args))
   ipcMain.on('wt-parse-torrent', (event, ...args) => webTorrent.win.webContents.send('wt-parse-torrent', ...args))
   ipcMain.on('wt-identifier-torrent', (event, ...args) => webTorrent.win.webContents.send('wt-identifier-torrent', ...args))
