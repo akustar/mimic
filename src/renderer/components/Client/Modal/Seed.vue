@@ -104,7 +104,7 @@
         const stats = fs.lstatSync(this.seedPath)
 
         if (stats.isDirectory()) {
-          shell.updateFolderOptions(this.seedPath)
+          this.updateFolderOptions(this.seedPath)
         }
         else {
           this.updateFileOptions(this.seedPath)
