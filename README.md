@@ -13,7 +13,19 @@
 
 **MIMIC**은 **BitTorrent** 및 [WebTorrent](https://github.com/webtorrent/webtorrent)를 지원하는 스트리밍 토렌트 클라이언트 입니다.
 
-> 60%정도 진행된 상태입니다
+### 특징
+* 가볍고 빠른 토렌트 클라이언트
+* 익숙한 UI/UX
+* 무료, 광고없음, 오픈소스
+* windows 및 mac OS 지원
+* 비디오 및 오디오 실시간 스트리밍
+  * MP4, MKV, WEBM 지원
+  * SMI, SRT, VTT 등 자막 지원
+  * ~~360° Video~~
+  * ~~AirPlay, Chromecast~~
+* 웹 브라우저에 연결하기 위한 [WebTorrent](https://github.com/webtorrent/webtorrent) 프로토콜 지원
+
+※ 진행 상황: 60%
 
 ### 설치
 

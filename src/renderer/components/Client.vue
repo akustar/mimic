@@ -8,8 +8,8 @@
         <div id="addTorrent">
           <div class="dropdown">
             <button type="button" data-tippy-close="true" @click="addTorrentFile">토렌트 파일 추가</button>
-            <button type="button" data-tippy-close="true" @click="isModalShow = true">토렌트 주소 추가</button>
-            <button type="button" data-tippy-close="true">새 토렌트 만들기</button>
+            <button type="button" data-tippy-close="true" @click="mdMagnetIsShow = true">토렌트 주소 추가</button>
+            <button type="button" data-tippy-close="true" @click="mdSeedIsShow = true">새 토렌트 만들기</button>
           </div>
         </div>
       </div>
@@ -33,10 +33,13 @@
     <footer>
 
     </footer>
+
     <!-- 모달: 토렌트 파일 추가 -->
     <md-file v-if="parseResults.length > 0" :parseResults="parseResults"></md-file>
     <!-- 모달: 마그넷 추가 -->
-    <md-magnet v-if="isModalShow" @close="isModalShow = false" @loader="loader = true"></md-magnet>
+    <md-magnet v-if="mdMagnetIsShow" @close="mdMagnetIsShow = false" @loader="loader = true"></md-magnet>
+    <!-- 모달: 시드 추가 -->
+    <md-seed v-if="mdSeedIsShow" @close="mdSeedIsShow = false"></md-seed>
 
     <transition name="opacity">
       <div class="overlay" v-if="loader">
@@ -61,11 +64,11 @@
   import Detail from './Client/Detail'
   import MdFile from './Client/Modal/File'
   import MdMagnet from './Client/Modal/Magnet'
+  import MdSeed from './Client/Modal/Seed'
 
   export default {
     data() {
-      return {        
-        store: null,
+      return {
         progress: {
           torrents: [],
           progress: 0,
@@ -75,7 +78,8 @@
         currentKey: '',
 
         loader: false,
-        isModalShow: false
+        mdSeedIsShow: false,
+        mdMagnetIsShow: false
       }
     },
     mounted() {
@@ -146,12 +150,8 @@
               toasted('시간초과: 잘못된 마그넷 주소 입니다')
             break
             default:
-              if (message.indexOf('duplicate') > -1) {
-                toasted('같은 이름의 토렌트가 이미 존재합니다')
-              }
-              else {
-                toasted('에러')
-              }
+              if (message.indexOf('duplicate') > -1) toasted('같은 이름의 토렌트가 이미 존재합니다')
+              else toasted('에러')
           }
 
           this.loader = false
@@ -221,7 +221,8 @@
       Actions,
       Detail,
       MdFile,
-      MdMagnet      
+      MdMagnet,
+      MdSeed     
     }
   }
 </script>
