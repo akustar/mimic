@@ -200,42 +200,26 @@
       // 토렌트 파일 또는 시드 파일을 드래그 앤 드롭 합니다.
       dragDropTorrent(files, pos, fileList, directories) {
         // 드롭 된 파일중 폴더가 있는지 확인 합니다.
-        if (directories.length > 0) {
-          this.seedPath = fileList[0].path
-          this.seedIsShow = true
+        const tPaths = []
+        const sPaths = []
+        
+        for (const file of fileList) {
+          if (fileExtension.isTorrent(file)) {
+            tPaths.push(file.path)
+          }
+          else {
+            sPaths.push(file.path)
+          }
         }
 
-        console.log(fileList, directories)
-        // const tPaths = []
-        // const sPaths = []
+        if (tPaths.length > 0) {
+          this.parseTorrentFile(tPaths)
+        }
 
-        // for (const file of fileList.entries()) {
-        //   if (fileExtension.isTorrent(file)) {
-        //     tPaths.push(file.path)
-        //   }
-        //   else {
-        //     sPaths.push(file.path)
-        //   }
-        // }
-
-
-
-        // // 토렌트 파일과 시드 파일이 함께 드롭된 경우 토렌트 파일만 받겠습니다
-        // if (tPaths.length > 0 && sPaths.length > 0) {
-        //   this.parseTorrentFile(tPaths)
-        //   return
-        // }
-
-        // // 토렌트 파일 업로드
-        // if (tPaths.length > 0) {
-        //   this.parseTorrentFile(tPaths)
-        // }
-
-        // // 시드 파일 업로드(시드 파일은 한번에 하나만 받겠습니다)
-        // if (sPaths.length > 0) {
-        //   this.seedPath = sPaths[0]
-        //   this.seedIsShow = true
-        // }
+        if (sPaths.length > 0) {
+          this.seedPath = sPaths[0]
+          this.seedIsShow = true
+        }
       },
       poster(posterFilePath) {
         if (posterFilePath) {
