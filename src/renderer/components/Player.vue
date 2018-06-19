@@ -376,9 +376,10 @@
         let lastPiecePresent = false
         const loadingParts = []
         const torrent = progress.torrents[this.torrentKey]
-        const fileProg = torrent.fileProg[this.mediaIndex]
 
-        if (!fileProg) return
+        if (!torrent) return
+
+        const fileProg = torrent.fileProg[this.mediaIndex]
 
         while (this.loadingParts.length > 0) this.loadingParts.pop()
 
