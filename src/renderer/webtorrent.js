@@ -29,8 +29,9 @@ function init() {
   ipcRenderer.on('wt-select-files', (event, ...args) => selectFiles(...args))
   ipcRenderer.on('wt-identifier-torrent', (event, ...args) => identifierTorrent(...args))
   ipcRenderer.on('wt-start-server', (event, ...args) => startServer(...args))
-  ipcRenderer.on('wt-stop-server', (event, ...args) => stopServer(...args))  
-  
+  ipcRenderer.on('wt-stop-server', (event, ...args) => stopServer(...args))
+  ipcRenderer.on('wt-select-files', (event, ...args) => selectFiles(...args))  
+
   setInterval(updateTorrentProgress, 1000)
 }
 
@@ -121,8 +122,6 @@ function addTorrentEvents(torrent) {
     console.log('wt-warning: ', message)
   }
 }
-
-
 
 // 마그넷 주소 또는 발급번호(미정)를 전달받으면 다운로드를 시작합니다
 function identifierTorrent(torrentId) {

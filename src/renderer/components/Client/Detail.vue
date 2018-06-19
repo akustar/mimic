@@ -19,7 +19,7 @@
             <td class="text-right">{{ prettyBytes(file.length) }}</td>
             <td class="text-right">
               <div class="checkbox-slider">
-                <input type="checkbox" :id="'checkbox-slider-' + fileIndex" :checked="summary.selections[fileIndex]">
+                <input type="checkbox" :id="'checkbox-slider-' + fileIndex" @change="selectFiles(fileIndex)" :checked="summary.selections[fileIndex]">
                 <label :for="'checkbox-slider-' + fileIndex"></label>
               </div>
             </td>
@@ -40,12 +40,13 @@
     props: ['torrentKey', 'fileProg'],
     data() {
       return {
+        torrentSummary: null,
         summary: null
       }
     },
     mounted() {
-      const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
-      this.summary = torrentSummary[this.torrentKey]
+      this.torrentSummary = ipcRenderer.sendSync('get', 'torrents')
+      this.summary = this.torrentSummary[this.torrentKey]
     },
     methods: {
       fileType(file) {
@@ -59,6 +60,12 @@
         if (numPiecesPresent && numPieces) {
           return Math.round(100 * numPiecesPresent / numPieces) + '%'
         }
+      },
+      selectFiles(fileIndex) {
+        this.summary.selections[fileIndex] = !this.summary.selections[fileIndex]
+
+        ipcRenderer.send('set', 'torrents', this.torrentSummary)
+        ipcRenderer.send('wt-select-files', this.summary.infoHash, this.summary.selections)
       },
       openFile(file, fileIndex) {
         // 재생할 수 있는 파일인지 확인합니다.
