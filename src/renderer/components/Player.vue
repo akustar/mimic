@@ -29,7 +29,7 @@
         <div class="playback-bar" ref="playbackBar" :class="{'is-dragging': isDragging}" @mousedown.stop="handleTimeupdate($event)">
           <div class="progress-bar">
             <div class="progress-filled" :style="{transform: progressFilled}"></div>
-            <div class="progress-part"></div>
+            <div class="progress-part" v-for="(part, index) in loadingParts" :key="index" :style="part"></div>
             <div class="progress-cursor" :style="{left: progressCursor}"></div>
           </div>
         </div>
@@ -84,6 +84,7 @@
         win: remote.getCurrentWindow(),
         winIndex: -1,
 
+        torrentKey: '',
         mediaName: '',
         mediaIndex: 0,
         mediaType: '',
@@ -92,7 +93,7 @@
         time: 0,
         duration: 0,
         volume: 50,
-        parts: [],
+        loadingParts: [],
         progress: null,
         message: '',
         mouseTimer: 0,
@@ -113,10 +114,11 @@
     },
     methods: {
       ipc() {
-        ipcRenderer.on('did-finish-load', (event, winIndex, infoHash, mediaName, mediaIndex) => {
+        ipcRenderer.on('did-finish-load', (event, winIndex, infoHash, mediaName, mediaIndex, torrentKey) => {
           this.mediaName = mediaName
           this.mediaIndex = mediaIndex
           this.mediaType = fileExtension.isVideo(mediaName) ? 'video' : 'audio'
+          this.torrentKey = torrentKey
           
           // 스트리밍을 위한 서버 실행 요청
           ipcRenderer.send('wt-start-server', infoHash, winIndex, mediaIndex)
@@ -124,6 +126,11 @@
 
         // 요청한 서버가 실행되면 미디어를 재생합니다.
         ipcRenderer.on('wt-server-running', (event, localURL) => this.localURL = localURL)
+
+        // 다운로드 중인 토렌트 정보를 받습니다(1초마다)
+        ipcRenderer.on('wt-loading-parts', (event, progress) => {
+          this.renderLoadingParts(progress)
+        })
       },
       initEvents() {
         // 자막 드래그 업로드
@@ -362,7 +369,36 @@
         this.$refs.media.appendChild(track)
 
         this.sendMessage('자막 추가 됨')
-      },      
+      },
+      renderLoadingParts(progress) {
+        if (!progress) return
+
+        let lastPiecePresent = false
+        const loadingParts = []
+        const torrent = progress.torrents[this.torrentKey]
+        const fileProg = torrent.fileProg[this.mediaIndex]
+
+        if (!fileProg) return
+
+        while (this.loadingParts.length > 0) this.loadingParts.pop()
+
+        for (let i = fileProg.startPiece; i <= fileProg.endPiece; i++) {
+          const partPresent = Bitfield.prototype.get.call(torrent.bitfield, i)
+          if(partPresent && !lastPiecePresent) {
+            loadingParts.push({start: i - fileProg.startPiece, count: 1})
+          } else if (partPresent) {
+            loadingParts[loadingParts.length - 1].count++
+          }
+          lastPiecePresent = partPresent
+        }
+
+        loadingParts.forEach((part, index) => {
+          this.loadingParts.push({
+            left: (100 * part.start / fileProg.numPieces) + '%',
+            width: (100 * part.count / fileProg.numPieces) + '%'
+          })
+        })
+      },
       zeroFill(n) {
         return ('0' + n).slice(-2)
       }     

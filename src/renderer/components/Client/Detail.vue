@@ -63,7 +63,7 @@
       openFile(file, fileIndex) {
         // 재생할 수 있는 파일인지 확인합니다.
         if (fileExtension.isPlayable(file)) {
-          ipcRenderer.send('wt-create-streaming', this.summary.infoHash, file.name, fileIndex)
+          ipcRenderer.send('wt-create-streaming', this.summary.infoHash, file.name, fileIndex, this.torrentKey)
         }
         // 재생 파일이 아닌 경우
         // 실행을 시킬지 폴더만 열어줄지..

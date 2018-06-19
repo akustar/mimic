@@ -208,22 +208,23 @@ function getTorrentProgress () {
   const hasActiveTorrents = client.torrents.some(torrent => {
     return torrent.progress !== 1
   })
-  const torrentProg = client.torrents.map(torrent => {
-    const fileProg = torrent.files && torrent.files.map((file, index) => {
-      const numPieces = file._endPiece - file._startPiece + 1
-      let numPiecesPresent = 0
-      for (let piece = file._startPiece; piece <= file._endPiece; piece++) {
-        if (torrent.bitfield.get(piece)) numPiecesPresent++
-      }
-      return {
-        startPiece: file._startPiece,
-        endPiece: file._endPiece,
-        numPieces,
-        numPiecesPresent
-      }
-    })
-    return {
-      key: torrent.key,
+  const torrentProg = {}
+
+  for(const torrent of client.torrents) {
+    torrentProg[torrent.key] = {
+      fileProg: torrent.files && torrent.files.map((file, index) => {
+        const numPieces = file._endPiece - file._startPiece + 1
+        let numPiecesPresent = 0
+        for (let piece = file._startPiece; piece <= file._endPiece; piece++) {
+          if (torrent.bitfield.get(piece)) numPiecesPresent++
+        }
+        return {
+          startPiece: file._startPiece,
+          endPiece: file._endPiece,
+          numPieces,
+          numPiecesPresent
+        }
+      }),
       name: torrent.name,
       ready: torrent.ready,
       progress: torrent.progress,
@@ -233,10 +234,9 @@ function getTorrentProgress () {
       numPeers: torrent.numPeers,
       length: torrent.length,
       posterFilePath: torrent.posterFilePath,
-      bitfield: torrent.bitfield,
-      fileProg: fileProg,
+      bitfield: torrent.bitfield
     }
-  })
+  }
 
   return {
     torrents: torrentProg,

@@ -17,17 +17,17 @@
     <main>
       <div
           class="torrent"
-          v-for="torrent in progress.torrents" :key="torrent.key"
-          :class="{ active: currentKey === torrent.key, poster: torrent.posterFilePath }"
+          v-for="(torrent, key) in progress.torrents" :key="key"
+          :class="{active: currentKey === key, poster: torrent.posterFilePath}"
           :style="poster(torrent.posterFilePath)"
-          @click="currentKey === torrent.key ? currentKey = '' : currentKey = torrent.key "
+          @click="currentKey === key ? currentKey = '' : currentKey = key"
         >
         <!-- 메타데이타 -->
         <metadata :torrent="torrent"></metadata>
         <!-- 액션 -->
-        <actions :torrentKey="torrent.key"></actions>
+        <actions :torrentKey="key"></actions>
         <!-- 디테일 -->
-        <detail v-if="currentKey === torrent.key" :torrentKey="torrent.key" :fileProg="torrent.fileProg"></detail>
+        <detail v-if="currentKey === key" :torrentKey="key" :fileProg="torrent.fileProg"></detail>
       </div>
     </main>
     <footer>
@@ -70,7 +70,7 @@
     data() {
       return {
         progress: {
-          torrents: [],
+          torrents: null,
           progress: 0,
           hasActiveTorrents: false
         },
@@ -97,6 +97,8 @@
       // 프로그램 재시작시 연결되어있던 토렌트에 다시 연결합니다.
       reconnect() {
         const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
+        // 토렌트가 연결되기까지 약간의 시간이 걸리므로 사용자에게 먼저 저장된 정보를 보여줍니다.
+        this.progress.torrents = torrentSummary
 
         for (const key in torrentSummary) {
           const { torrentFileName, posterFileName, selections, infoHash, path:downloadPath, } = torrentSummary[key]
@@ -107,8 +109,6 @@
             const torrentId = !error ? torrentFilePath : infoHash
             ipcRenderer.send('wt-start-torrent', torrentId, downloadPath, key, selections, posterFilePath)
           })
-
-          this.progress.torrents.push(torrentSummary[key])
         }
       },
       ipc() {
@@ -129,6 +129,9 @@
         // 토렌트 요약 정보를 받습니다.
         ipcRenderer.on('wt-progress', (event, progress) => {
           this.$set(this.progress, 'torrents', progress.torrents)
+
+          // 재생중인 미디어에 토렌트 정보를 보냅니다.
+          ipcRenderer.send('wt-loading-parts', progress)
         })
 
         // 에러

@@ -19,6 +19,9 @@ function init(store, client, webTorrent, streaming) {
 
   // client -> streaming
   ipcMain.on('wt-create-streaming', (event, ...args) => streaming.create(webTorrent, ...args))
+  ipcMain.on('wt-loading-parts', (event, ...args) => {
+    for (const win of streaming.win) win.webContents.send('wt-loading-parts', ...args)
+  })
 
   // streaming -> webtorrent
   ipcMain.on('wt-start-server', (event, ...args) => webTorrent.win.webContents.send('wt-start-server', ...args))

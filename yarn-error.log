@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\장준혁\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add stringSimilarity
+  C:\Program Files\nodejs\node.exe C:\Users\장준혁\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add Bitfield
 
 PATH: 
-  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\장준혁\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\APM_Setup\Server\Apache\bin;C:\APM_Setup\Server\MySQL5\bin;C:\APM_Setup\Server\PHP5;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_162\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Program Files\nodejs;C:\WINDOWS\System32\OpenSSH;C:\Users\장준혁\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Microsoft VS Code\bin;C:\Android\android-sdk\platform-tools;C:\Users\장준혁\AppData\Roaming\npm;C:\Program Files (x86)\DimerCli;C:\Users\장준혁\AppData\Local\GitHubDesktop\bin
+  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\장준혁\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\APM_Setup\Server\Apache\bin;C:\APM_Setup\Server\MySQL5\bin;C:\APM_Setup\Server\PHP5;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_162\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Program Files\nodejs;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Users\장준혁\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Microsoft VS Code\bin;C:\Android\android-sdk\platform-tools;C:\Users\장준혁\AppData\Roaming\npm;C:\Program Files (x86)\DimerCli;C:\Users\장준혁\AppData\Local\GitHubDesktop\bin
 
 Yarn version: 
   1.0.2
@@ -38,11 +38,16 @@ npm manifest:
     },
     "dependencies": {
       "application-config-path": "^0.1.0",
+      "bitfield": "^2.0.0",
+      "count-files": "^2.6.2",
       "debounce": "^1.1.0",
       "drag-drop": "^4.2.0",
+      "iconv-lite": "^0.4.23",
+      "jschardet": "^1.6.0",
       "material-design-icons": "^3.0.1",
       "mkdirp": "^0.5.1",
       "rimraf": "^2.6.2",
+      "string-similarity": "^1.2.0",
       "vue": "^2.5.16",
       "vue-electron": "^1.0.6",
       "vue-tippy": "^2.0.15",
@@ -179,6 +184,14 @@ Lockfile:
   amdefine@>=0.0.4:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+  
+  ansi-diff-stream@^1.2.0:
+    version "1.2.1"
+    resolved "https://registry.yarnpkg.com/ansi-diff-stream/-/ansi-diff-stream-1.2.1.tgz#e75f98dc43c6ba3d63af481e693e89fd4262ac58"
+    dependencies:
+      ansi-regex "^2.0.0"
+      buffer-from "^1.0.0"
+      through2 "^2.0.1"
   
   ansi-escapes@^1.0.0:
     version "1.4.0"
@@ -2055,6 +2068,13 @@ Lockfile:
       parse-json "^2.2.0"
       require-from-string "^1.1.0"
   
+  count-files@^2.6.2:
+    version "2.6.2"
+    resolved "https://registry.yarnpkg.com/count-files/-/count-files-2.6.2.tgz#5c8116197ef569527bd7b4bd5aa2c033b90953d3"
+    dependencies:
+      neat-log "^1.0.0"
+      prettier-bytes "^1.0.3"
+  
   create-ecdh@^4.0.0:
     version "4.0.3"
     resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.3.tgz#c9111b6f33045c4697f144787f9254cdc77c45ff"
@@ -3674,7 +3694,7 @@ Lockfile:
     version "0.4.19"
     resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
   
-  iconv-lite@^0.4.4:
+  iconv-lite@^0.4.23, iconv-lite@^0.4.4:
     version "0.4.23"
     resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.23.tgz#297871f63be507adcfbfca715d0cd0eed84e9a63"
     dependencies:
@@ -4100,6 +4120,10 @@ Lockfile:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   
+  jschardet@^1.6.0:
+    version "1.6.0"
+    resolved "https://registry.yarnpkg.com/jschardet/-/jschardet-1.6.0.tgz#c7d1a71edcff2839db2f9ec30fc5d5ebd3c1a678"
+  
   jsesc@^1.3.0:
     version "1.3.0"
     resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-1.3.0.tgz#46c3fec8c1892b12b0833db9bc7622176dbab34b"
@@ -4380,6 +4404,10 @@ Lockfile:
       lodash._baseclone "^3.0.0"
       lodash._bindcallback "^3.0.0"
   
+  lodash.flattendeep@^4.4.0:
+    version "4.4.0"
+    resolved "https://registry.yarnpkg.com/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
+  
   lodash.get@^4.0.0:
     version "4.4.2"
     resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
@@ -4451,6 +4479,10 @@ Lockfile:
     version "4.6.0"
     resolved "https://registry.yarnpkg.com/lodash.some/-/lodash.some-4.6.0.tgz#1bb9f314ef6b8baded13b549169b2a945eb68e4d"
   
+  lodash.throttle@^4.1.1:
+    version "4.1.1"
+    resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+  
   lodash.toplainobject@^3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/lodash.toplainobject/-/lodash.toplainobject-3.0.0.tgz#28790ad942d293d78aa663a07ecf7f52ca04198d"
@@ -4462,7 +4494,7 @@ Lockfile:
     version "4.5.0"
     resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   
-  lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4:
+  lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4:
     version "4.17.10"
     resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
   
@@ -4845,6 +4877,12 @@ Lockfile:
     version "2.10.0"
     resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
   
+  nanobus@^3.0.0:
+    version "3.3.0"
+    resolved "https://registry.yarnpkg.com/nanobus/-/nanobus-3.3.0.tgz#bce5d5d435a5362c7dad7f9e90cd21959589be86"
+    dependencies:
+      nanotiming "^1.0.1"
+  
   nanomatch@^1.2.9:
     version "1.2.9"
     resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.9.tgz#879f7150cb2dab7a471259066c104eee6e0fa7c2"
@@ -4862,11 +4900,23 @@ Lockfile:
       snapdragon "^0.8.1"
       to-regex "^3.0.1"
   
+  nanotiming@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/nanotiming/-/nanotiming-1.0.1.tgz#13e7a2e2767967974fedfff071edd39327f44ec3"
+  
   ncname@1.0.x:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/ncname/-/ncname-1.0.0.tgz#5b57ad18b1ca092864ef62b0b1ed8194f383b71c"
     dependencies:
       xml-char-classes "^1.0.0"
+  
+  neat-log@^1.0.0:
+    version "1.1.2"
+    resolved "https://registry.yarnpkg.com/neat-log/-/neat-log-1.1.2.tgz#cb0d5feabb27bca572047bea955448546dca0291"
+    dependencies:
+      lodash.throttle "^4.1.1"
+      nanobus "^3.0.0"
+      status-logger "^3.1.1"
   
   needle@^2.2.0:
     version "2.2.1"
@@ -5745,6 +5795,10 @@ Lockfile:
   preserve@^0.2.0:
     version "0.2.0"
     resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
+  
+  prettier-bytes@^1.0.3:
+    version "1.0.4"
+    resolved "https://registry.yarnpkg.com/prettier-bytes/-/prettier-bytes-1.0.4.tgz#994b02aa46f699c50b6257b5faaa7fe2557e62d6"
   
   prettier@^1.7.0:
     version "1.13.5"
@@ -6736,6 +6790,14 @@ Lockfile:
       define-property "^0.2.5"
       object-copy "^0.1.0"
   
+  status-logger@^3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/status-logger/-/status-logger-3.1.1.tgz#3a6b3774ddc5fb224b62c23f44299c3c3ed19344"
+    dependencies:
+      ansi-diff-stream "^1.2.0"
+      lodash.flattendeep "^4.4.0"
+      wrap-ansi "^3.0.1"
+  
   "statuses@>= 1.3.1 < 2", "statuses@>= 1.4.0 < 2":
     version "1.5.0"
     resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
@@ -6794,6 +6856,12 @@ Lockfile:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   
+  string-similarity@^1.2.0:
+    version "1.2.0"
+    resolved "https://registry.yarnpkg.com/string-similarity/-/string-similarity-1.2.0.tgz#d75153cb383846318b7a39a8d9292bb4db4e9c30"
+    dependencies:
+      lodash "^4.13.1"
+  
   string-width@^1.0.1, string-width@^1.0.2:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/string-width/-/string-width-1.0.2.tgz#118bdf5b8cdc51a2a7e70d211e07e2b0b9b107d3"
@@ -6802,7 +6870,7 @@ Lockfile:
       is-fullwidth-code-point "^1.0.0"
       strip-ansi "^3.0.0"
   
-  "string-width@^1.0.2 || 2", string-width@^2.0.0:
+  "string-width@^1.0.2 || 2", string-width@^2.0.0, string-width@^2.1.1:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/string-width/-/string-width-2.1.1.tgz#ab93f27a8dc13d28cac815c462143a6d9012ae9e"
     dependencies:
@@ -6984,7 +7052,7 @@ Lockfile:
     version "0.0.2"
     resolved "https://registry.yarnpkg.com/throttleit/-/throttleit-0.0.2.tgz#cfedf88e60c00dd9697b61fdd2a8343a9b680eaf"
   
-  through2@^2.0.0:
+  through2@^2.0.0, through2@^2.0.1:
     version "2.0.3"
     resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.3.tgz#0004569b37c7c74ba39c43f3ced78d1ad94140be"
     dependencies:
@@ -7664,6 +7732,13 @@ Lockfile:
       string-width "^1.0.1"
       strip-ansi "^3.0.1"
   
+  wrap-ansi@^3.0.1:
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-3.0.1.tgz#288a04d87eda5c286e060dfe8f135ce8d007f8ba"
+    dependencies:
+      string-width "^2.1.1"
+      strip-ansi "^4.0.0"
+  
   wrappy@1:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
@@ -7811,7 +7886,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/zero-fill/-/zero-fill-2.2.3.tgz#a3def06ba5e39ae644850bb4ca2ad4112b4855e9"
 
 Trace: 
-  Error: https://registry.yarnpkg.com/stringSimilarity: Not found
+  Error: https://registry.yarnpkg.com/Bitfield: Not found
       at Request.params.callback [as _callback] (C:\Users\장준혁\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:60302:18)
       at Request.self.callback (C:\Users\장준혁\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:117370:22)
       at emitTwo (events.js:126:13)
