@@ -18,7 +18,10 @@
     },
     mounted() {
       ipcRenderer.on('focus', () => this.unfocused = false)
-      ipcRenderer.on('blur', () => this.unfocused = true)
+      ipcRenderer.on('blur', () => {
+        this.unfocused = true
+        document.body.click()
+      })
 
       document.addEventListener('click', event => {
         if (event.target.dataset.tippyClose) {

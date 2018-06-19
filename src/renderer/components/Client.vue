@@ -14,13 +14,13 @@
         </div>
       </div>
     </header>
-    <main @click="currentKey = ''">
+    <main>
       <div
           class="torrent"
           v-for="torrent in progress.torrents" :key="torrent.key"
           :class="{ active: currentKey === torrent.key, poster: torrent.posterFilePath }"
           :style="poster(torrent.posterFilePath)"
-          @click.stop="currentKey === torrent.key ? currentKey = '' : currentKey = torrent.key "
+          @click="currentKey === torrent.key ? currentKey = '' : currentKey = torrent.key "
         >
         <!-- 메타데이타 -->
         <metadata :torrent="torrent"></metadata>
@@ -170,7 +170,8 @@
       pasteTorrent() {
         const editableHtmlTags = new Set(['input', 'textarea'])
 
-        if (editableHtmlTags.has(event.target.tagName.toLowerCase())) return
+        if (editableHtmlTags.has(event.target.tagName.toLowerCase()) ||
+        this.seedIsShow || this.magnetIsShow || this.parseResults.length > 0) return
 
         const torrentId = clipboard.readText().trim()
 
