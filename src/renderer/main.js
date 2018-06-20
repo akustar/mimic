@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueTippy from 'vue-tippy'
 import Toasted from 'vue-toasted'
 import App from './App'
+
 import 'material-design-icons/iconfont/material-icons.css'
 
 Vue.use(VueTippy, {

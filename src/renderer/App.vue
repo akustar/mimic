@@ -6,6 +6,7 @@
 
 <script>
   import { ipcRenderer } from 'electron'
+  // components
   import Client from '@/components/Client'
   
   export default {
@@ -36,6 +37,6 @@
 </script>
 
 <style>
-  @import '/src/renderer/assets/css/reset.css';
-  @import '/src/renderer/assets/css/common.css';
+  @import '~@/assets/css/reset.css';
+  @import '~@/assets/css/common.css';
 </style>

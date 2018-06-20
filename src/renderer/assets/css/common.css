@@ -96,7 +96,7 @@
 }
 .checkbox input[type="checkbox"]:checked + label .checkmark svg{
   display: block;
-}  
+}
 .checkbox-slider {
   position: relative;
   display: inline-block;

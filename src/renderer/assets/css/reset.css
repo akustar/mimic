@@ -1,22 +1,22 @@
 @font-face {
   font-family: Whitney;
   font-weight: 400;
-  src: url(../fonts/whitney-book.woff) format("woff")
+  src: url(~@/assets/fonts/whitney-book.woff) format("woff")
 }
 @font-face {
   font-family: Whitney;
   font-weight: 500;
-  src: url(../fonts/whitney-medium.woff) format("woff")
+  src: url(~@/assets/fonts/whitney-medium.woff) format("woff")
 }
 @font-face {
   font-family: Whitney;
   font-weight: 600;
-  src: url(../fonts/whitney-semibold.woff) format("woff")
+  src: url(~@/assets/fonts/whitney-semibold.woff) format("woff")
 }  
 @font-face {
   font-family: Whitney;
   font-weight: 700;
-  src: url(../fonts/whitney-bold.woff) format("woff")
+  src: url(~@/assets/fonts/whitney-bold.woff) format("woff")
 }
 
 * {
