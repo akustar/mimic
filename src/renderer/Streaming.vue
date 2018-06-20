@@ -25,7 +25,7 @@
     }
   }
 </script>
-<style>
-  @import '/src/renderer/assets/css/reset.css';
-  @import '/src/renderer/assets/css/common.css';
+
+<style lang='scss'>
+@import '~@/assets/stylesheets/main.scss';
 </style>

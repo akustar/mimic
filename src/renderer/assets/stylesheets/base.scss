@@ -1,3 +1,69 @@
+@font-face {
+  font-family: Whitney;
+  font-weight: 400;
+  src: url(~@/assets/fonts/whitney-book.woff) format("woff")
+}
+@font-face {
+  font-family: Whitney;
+  font-weight: 500;
+  src: url(~@/assets/fonts/whitney-medium.woff) format("woff")
+}
+@font-face {
+  font-family: Whitney;
+  font-weight: 600;
+  src: url(~@/assets/fonts/whitney-semibold.woff) format("woff")
+}  
+@font-face {
+  font-family: Whitney;
+  font-weight: 700;
+  src: url(~@/assets/fonts/whitney-bold.woff) format("woff")
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255, .8);
+  user-select: none;
+  overflow: hidden;
+}
+
+button {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: rgba(255,255,255, .8);
+  border: none;
+  user-select: none;
+  background-color: transparent;
+  border-radius: 3px;
+  outline: none;
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
+}
+
+input[type="text"] {
+  width: 100%;
+  height: 40px;
+  border-radius: 3px;
+  font-weight: 400;
+  outline: none;
+  padding: 10px;
+  font-family: inherit;
+  transition: background-color .15s ease,border .15s ease;
+}
+
+svg {
+  display: block;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   border-radius: 0px;
@@ -50,84 +116,90 @@
   border: 1px solid rgba(0,0,0,.3);
   font-weight: 600;
   border-radius: 3px;
+  &:hover {
+    color: #fff;
+    background-color: rgba(0,0,0,.2);
+  }
 }
-.button-filled-black:hover {
-  color: #fff;
-  background-color: rgba(0,0,0,.2);
-}
+
 .button-filled-green {
   color: #fff;
   background-color: #43b581;
   font-weight: 600;
   border-radius: 3px;
+  &:hover {
+    background-color: #3ca374;
+  }
 }
-.button-filled-green:hover {
-  background-color: #3ca374;
-}  
 
 .checkbox input[type="checkbox"] {
   display: none;
+  + label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    span {
+      margin: 0 8px;
+    }
+    .checkmark {
+      display: flex;
+      align-items: center;    
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+      border: 1px solid #72767d;
+      border-radius: 3px;
+      box-sizing: border-box;
+      svg {
+        display: none;
+      }
+    }
+  }
+  &:checked {
+    label {
+      .checkmark {
+        background-color: #fff;
+        border-color: #fff;
+        svg {
+          display: block;
+        }
+      }
+    }
+  }
 }
-.checkbox input[type="checkbox"] + label {
-  display: flex;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-}
-.checkbox input[type="checkbox"] + label > span {
-  margin: 0 8px;
-}
-.checkbox input[type="checkbox"] + label .checkmark {
-  display: flex;
-  align-items: center;    
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
-  border: 1px solid #72767d;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
-.checkbox input[type="checkbox"]:checked + label .checkmark {
-  background-color: #fff;
-  border-color: #fff;
-}  
-.checkbox input[type="checkbox"] + label .checkmark svg {
-  display: none;
-}
-.checkbox input[type="checkbox"]:checked + label .checkmark svg{
-  display: block;
-}
+
 .checkbox-slider {
   position: relative;
   display: inline-block;
   width: 38px;
   height: 18px;
   flex: 0 0 38px;
-}
-.checkbox-slider input[type="checkbox"] {
-  width: 100%;
-  height: 100%;
-  background-color: #72767d;
-  cursor: pointer;
-  -webkit-appearance: none;
-  outline: none;
-}
-.checkbox-slider input[type="checkbox"] + label {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 20px;
-  height: 16px;
-  margin: 1px;
-  background-color: #f8f8f8;
-  transition: left 125ms linear;
-  cursor: pointer;
-}
-.checkbox-slider input[type="checkbox"]:checked {
-  background-color: #6fcf97;
-}
-.checkbox-slider input[type="checkbox"]:checked + label {
-  left: 16px
+  input[type="checkbox"] {
+    width: 100%;
+    height: 100%;
+    background-color: #72767d;
+    cursor: pointer;
+    -webkit-appearance: none;
+    outline: none;
+    + label {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 16px;
+      margin: 1px;
+      background-color: #f8f8f8;
+      transition: left 125ms linear;
+      cursor: pointer;
+    }
+    &:checked {
+      background-color: #6fcf97;
+      + label {
+        left: 16px;
+      }
+    }
+  }
 }
 
 .table {

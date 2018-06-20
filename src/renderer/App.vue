@@ -36,7 +36,6 @@
   }
 </script>
 
-<style>
-  @import '~@/assets/css/reset.css';
-  @import '~@/assets/css/common.css';
+<style lang='scss'>
+@import '~@/assets/stylesheets/main.scss';
 </style>
