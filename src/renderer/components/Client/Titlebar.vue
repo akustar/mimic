@@ -53,88 +53,88 @@ ipcRenderer.send('win-close')
 </script>
 
 <style>
-.titlebar {
-display: flex;
-align-items: center;
-justify-content: space-between;
-width: 100%;
-height: 22px;
-z-index: 9999;
-background-color: #202225;
--webkit-app-region: drag;
-pointer-events: none;
+.client .titlebar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 22px;
+	z-index: 9999;
+	background-color: #202225;
+	-webkit-app-region: drag;
+	pointer-events: none;
 }
-.titlebar-name {
-padding: 0 8px;
-font-size: 13px;
-cursor: default;
+.client .titlebar-name {
+	padding: 0 8px;
+	font-size: 13px;
+	cursor: default;
 }
-.titlebar-edge {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 4px;
-cursor: ns-resize;
--webkit-app-region: no-drag;
+.client .titlebar-edge {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 4px;
+	cursor: ns-resize;
+	-webkit-app-region: no-drag;
 }
-.is-win32 .titlebar-buttons {
-display: flex;
+.is-win32 .client .titlebar-buttons {
+	display: flex;
 }
-.is-win32 .titlebar-buttons > div {
-position: relative;
-display: flex;
-justify-content: center;
-align-items: center;
-width: 28px;
-height: 22px;
-opacity: .6;
-pointer-events: auto;
--webkit-app-region: no-drag;
-cursor: pointer;
+.is-win32 .client .titlebar-buttons > div {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 28px;
+	height: 22px;
+	opacity: .6;
+	pointer-events: auto;
+	-webkit-app-region: no-drag;
+	cursor: pointer;
 }
-.is-win32 .titlebar-buttons > div:hover {
-opacity: 1;
+.is-win32 .client .titlebar-buttons > div:hover {
+	opacity: 1;
 }
-.is-win32 .titlebar-buttons > div.titlebar-minimize:hover,
-.is-win32 .titlebar-buttons > div.titlebar-maximize:hover {
-background-color: rgba(255,255,255,0.1);
+.is-win32 .client .titlebar-buttons > div.titlebar-minimize:hover,
+.is-win32 .client .titlebar-buttons > div.titlebar-maximize:hover {
+	background-color: rgba(255,255,255,0.1);
 }
-.is-win32 .titlebar-buttons > div.titlebar-close:hover {
-background-color: #ec254f;
+.is-win32 .client .titlebar-buttons > div.titlebar-close:hover {
+	background-color: #ec254f;
 }
 
-.is-darwin .titlebar-buttons {
-display: flex;
-justify-content: space-between;
-width: 68px;
-padding: 0 8px;
-pointer-events: auto;
--webkit-app-region: no-drag;
+.is-darwin .client .titlebar-buttons {
+	display: flex;
+	justify-content: space-between;
+	width: 68px;
+	padding: 0 8px;
+	pointer-events: auto;
+	-webkit-app-region: no-drag;
 }
-.is-darwin .titlebar-buttons svg {
-display: block;
-visibility: hidden;
+.is-darwin .client .titlebar-buttons svg {
+	display: block;
+	visibility: hidden;
 }
-.is-darwin .titlebar-buttons:hover svg {
-visibility: visible;
+.is-darwin .client .titlebar-buttons:hover svg {
+	visibility: visible;
 }
-.is-darwin .titlebar-buttons > div {
-height: 12px;
-width: 12px;
-border-radius: 50%;
+.is-darwin .client .titlebar-buttons > div {
+	height: 12px;
+	width: 12px;
+	border-radius: 50%;
 }
-.is-darwin .titlebar-buttons > div.titlebar-close {
-background-color: #fc615d;
+.is-darwin .client .titlebar-buttons > div.titlebar-close {
+	background-color: #fc615d;
 }
-.is-darwin .titlebar-buttons > div.titlebar-minimize {
-background-color: #fdbc40;
+.is-darwin .client .titlebar-buttons > div.titlebar-minimize {
+	background-color: #fdbc40;
 }
-.is-darwin .titlebar-buttons > div.titlebar-maximize {
-background-color: #34c749;
+.is-darwin .client .titlebar-buttons > div.titlebar-maximize {
+	background-color: #34c749;
 }
-.is-darwin.unfocused .titlebar-buttons > div {
-background-color: #dcdcdc;
-opacity: .3;
+.is-darwin.unfocused .client .titlebar-buttons > div {
+	background-color: #dcdcdc;
+	opacity: .3;
 }
 </style>

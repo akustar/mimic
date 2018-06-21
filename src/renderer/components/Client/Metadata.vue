@@ -1,22 +1,5 @@
 <template>
   <div class="metadata">
-    <!-- <template v-if="name">
-      <div class="name">{{ name }}</div>
-      <div class="status">
-        <span>{{ status }}</span>
-        <span>{{ length }}</span>
-        <span>{{ numPeers }} Peers</span>
-        <span><i class="material-icons md-14" style="color: #00b0f4;">arrow_downward</i>&nbsp;{{ downloadSpeed }}</span>
-        <span><i class="material-icons md-14" style="color: #f04747;">arrow_upward</i>&nbsp;{{ uploadSpeed }}</span>
-        <span>{{ progress }}%</span>
-      </div>
-      <div><span class="progress"><span class="base" :style="{ width: progress + '%' }"></span></span></div>
-    </template>
-    <template v-else>
-      <div class="name">연결 중...</div>
-      <div class="status">&nbsp;</div>
-      <div><span class="progress"><span class="base"></span></span></div>
-    </template> -->
     <div class="name ellipsis">{{ name }}</div>
     <div class="status ellipsis">
       <span>{{ status }}</span>
@@ -79,10 +62,12 @@
   .metadata {
     padding: 20px 15px 0;
   }
+  .poster .metadata > div {
+    color: #fff;
+  }
   .metadata > div {
     width: 100%;
     line-height: 24px;
-    color: rgba(255,255,255,0.7); 
   }
   .metadata .name {
     font-size: 15px;

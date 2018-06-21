@@ -87,6 +87,9 @@
     justify-content: space-between;
     padding: 15px 15px 6px;
   }
+  .poster .actions button {
+    color: #fff;
+  }
   .actions > div {
     display: flex;
     align-items: center;

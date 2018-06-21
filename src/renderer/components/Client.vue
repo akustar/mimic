@@ -243,47 +243,48 @@
   }
 </script>
 
-<style lang="scss">
-
+<style>
 .client {
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 40px;
-    padding: 0 8px 0 12px;    
-    border-bottom: 1px solid #25262a;
-  }
-  main {
-    flex: 1 1 0%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    .torrent {
-      position: relative;
-      cursor: pointer;
-      min-height: 100px;
-      border-bottom: 1px solid rgba(114, 118, 126, 0.2);
-      &:hover, &.isActive {
-        background-color: #36393f;
-      }
-      &.poster {
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        border-bottom: none;
-        color: #fff;
-        text-shadow: rgba(0, 0, 0, 0.5) 0 0 4px;
-        .progress {
-          background: rgba(255,255,255,0.35);
-        }
-        button, .metadata > div {
-          color: #fff
-        }
-        .detail .table table tbody tr:hover {
-          background-color: rgba(0, 0, 0, 0.2)
-        }
-      }
-    }
-  }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.client header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 8px 0 12px;    
+  border-bottom: 1px solid #25262a;
+}
+.client main {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.client .torrent {
+  position: relative;
+  cursor: pointer;
+  min-height: 100px;
+  border-bottom: 1px solid rgba(114, 118, 126, 0.2);
+}
+.client .torrent:hover,
+.client .torrent.isActive {
+  background-color: #36393f;
+}
+.client .torrent.poster {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-bottom: none;
+  color: #fff;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 0 4px;
+}
+.client .torrent.poster .progress {
+  background: rgba(255,255,255,0.35);
+}
+.client .torrent.poster .detail .table table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.2)
 }
 </style>

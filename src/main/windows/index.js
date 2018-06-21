@@ -5,6 +5,7 @@ import webTorrent from './webTorrent'
 import streaming from './streaming'
 import ipc from '../ipc'
 import tray from '../tray'
+import menu from '../menu'
 
 const defaults = {
   downloads: app.getPath('downloads'),
@@ -20,6 +21,7 @@ app.on('ready', () => {
   client.create(store)
   webTorrent.create()
   
+  menu.init()
   tray.create()
 
   ipc.init(store, client, webTorrent, streaming)

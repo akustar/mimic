@@ -99,7 +99,7 @@ export default {
 </script>
 
 <style>
-.titlebar {
+.player .titlebar {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -113,12 +113,12 @@ export default {
 	transition: opacity .25s ease-out;
 	will-change: opacity;
 }
-.titlebar-name {
+.player .titlebar-name {
 	padding: 0 8px;
 	font-size: 13px;
 	cursor: default;
 }
-.titlebar-edge {
+.player .titlebar-edge {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -126,10 +126,10 @@ export default {
 	height: 4px;
 	cursor: ns-resize;
 }
-.is-win32 .titlebar-buttons {
+.is-win32 .player .titlebar-buttons {
 	display: flex;
 }
-.is-win32 .titlebar-buttons > div {
+.is-win32 .player .titlebar-buttons > div {
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -141,18 +141,18 @@ export default {
 	-webkit-app-region: no-drag;
 	cursor: pointer;
 }
-.is-win32 .titlebar-buttons > div:hover {
+.is-win32 .player .titlebar-buttons > div:hover {
 	opacity: 1;
 }
-.is-win32 .titlebar-buttons > div.titlebar-minimize:hover,
-.is-win32 .titlebar-buttons > div.titlebar-maximize:hover {
+.is-win32 .player .titlebar-buttons > div.titlebar-minimize:hover,
+.is-win32 .player .titlebar-buttons > div.titlebar-maximize:hover {
 	background-color: rgba(255,255,255,0.1);
 }
-.is-win32 .titlebar-buttons > div.titlebar-close:hover {
+.is-win32 .player .titlebar-buttons > div.titlebar-close:hover {
 	background-color: #ec254f;
 }
 
-.is-darwin .titlebar-buttons {
+.is-darwin .player .titlebar-buttons {
 	display: flex;
 	justify-content: space-between;
 	width: 68px;
@@ -160,28 +160,28 @@ export default {
 	pointer-events: auto;
 	-webkit-app-region: no-drag;
 }
-.is-darwin .titlebar-buttons svg {
+.is-darwin .player .titlebar-buttons svg {
 	display: block;
 	visibility: hidden;
 }
-.is-darwin .titlebar-buttons:hover svg {
+.is-darwin .player .titlebar-buttons:hover svg {
 	visibility: visible;
 }
-.is-darwin .titlebar-buttons > div {
+.is-darwin .player .titlebar-buttons > div {
 	height: 12px;
 	width: 12px;
 	border-radius: 50%;
 }
-.is-darwin .titlebar-buttons > div.titlebar-close {
+.is-darwin .player .titlebar-buttons > div.titlebar-close {
 	background-color: #fc615d;
 }
-.is-darwin .titlebar-buttons > div.titlebar-minimize {
+.is-darwin .player .titlebar-buttons > div.titlebar-minimize {
 	background-color: #fdbc40;
 }
-.is-darwin .titlebar-buttons > div.titlebar-maximize {
+.is-darwin .player .titlebar-buttons > div.titlebar-maximize {
 	background-color: #34c749;
 }
-.is-darwin.unfocused .titlebar-buttons > div {
+.is-darwin.unfocused .player .titlebar-buttons > div {
 	background-color: #dcdcdc;
 	opacity: .3;
 }

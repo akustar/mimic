@@ -19,15 +19,6 @@ Vue.use(VueTippy, {
   }
 })
 
-var EventBus = new Vue()
-Object.defineProperties(Vue.prototype, {
-  $eventBus: {
-    get() {
-      return EventBus
-    }
-  }
-})
-
 Vue.use(Toasted, { 
   theme: 'primary', 
   position: 'bottom-right', 
@@ -36,7 +27,7 @@ Vue.use(Toasted, {
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false
-Vue.config.devtools = true
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },
