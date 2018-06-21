@@ -38,10 +38,10 @@ function applicationConfigPath (name) {
 const APP_NAME = 'mimic-desktop'
 const appConfigPath = applicationConfigPath(APP_NAME)
 
-
 export default {
   APP_NAME,
   APP_VERSION: require('../package.json').version,
+  APP_ICON: path.join(__dirname, '..', 'build/icons', 'icon'),
   CONFIG_PATH: appConfigPath,
   POSTER_PATH: path.join(appConfigPath, 'Posters'),
   TORRENT_PATH: path.join(appConfigPath, 'Torrents')
