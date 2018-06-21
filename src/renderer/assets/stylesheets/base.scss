@@ -134,39 +134,35 @@ svg {
 
 .checkbox input[type="checkbox"] {
   display: none;
-  + label {
-    display: flex;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    span {
-      margin: 0 8px;
-    }
-    .checkmark {
-      display: flex;
-      align-items: center;    
-      width: 16px;
-      height: 16px;
-      flex: 0 0 16px;
-      border: 1px solid #72767d;
-      border-radius: 3px;
-      box-sizing: border-box;
-      svg {
-        display: none;
-      }
-    }
-  }
-  &:checked {
-    label {
-      .checkmark {
-        background-color: #fff;
-        border-color: #fff;
-        svg {
-          display: block;
-        }
-      }
-    }
-  }
+}
+.checkbox input[type="checkbox"] + label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+.checkbox input[type="checkbox"] + label > span {
+  margin: 0 8px;
+}
+.checkbox input[type="checkbox"] + label .checkmark {
+  display: flex;
+  align-items: center;    
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  border: 1px solid #72767d;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+.checkbox input[type="checkbox"]:checked + label .checkmark {
+  background-color: #fff;
+  border-color: #fff;
+}  
+.checkbox input[type="checkbox"] + label .checkmark svg {
+  display: none;
+}
+.checkbox input[type="checkbox"]:checked + label .checkmark svg{
+  display: block;
 }
 
 .checkbox-slider {
@@ -175,31 +171,35 @@ svg {
   width: 38px;
   height: 18px;
   flex: 0 0 38px;
-  input[type="checkbox"] {
-    width: 100%;
-    height: 100%;
-    background-color: #72767d;
-    cursor: pointer;
-    -webkit-appearance: none;
-    outline: none;
-    + label {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 20px;
-      height: 16px;
-      margin: 1px;
-      background-color: #f8f8f8;
-      transition: left 125ms linear;
-      cursor: pointer;
-    }
-    &:checked {
-      background-color: #6fcf97;
-      + label {
-        left: 16px;
-      }
-    }
-  }
+}
+
+.checkbox-slider input[type="checkbox"] {
+  width: 100%;
+  height: 100%;
+  background-color: #72767d;
+  cursor: pointer;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.checkbox-slider input[type="checkbox"] + label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 16px;
+  margin: 1px;
+  background-color: #f8f8f8;
+  transition: left 125ms linear;
+  cursor: pointer;
+}
+
+.checkbox-slider input[type="checkbox"]:checked {
+  background-color: #6fcf97;
+}
+
+.checkbox-slider input[type="checkbox"]:checked + label {
+  left: 16px;
 }
 
 .table {

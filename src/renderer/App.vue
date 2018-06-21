@@ -6,7 +6,6 @@
 
 <script>
   import { ipcRenderer } from 'electron'
-  // components
   import Client from '@/components/Client'
   
   export default {
@@ -39,3 +38,4 @@
 <style lang='scss'>
 @import '~@/assets/stylesheets/main.scss';
 </style>
+

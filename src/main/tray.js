@@ -1,15 +1,13 @@
-import { app, Menu, Tray, nativeImage } from 'electron'
+import { app, Menu, Tray } from 'electron'
 import client from './windows/client'
 import path from 'path'
-import config from '../config'
 
 let tray
 
 function create() {
   if (process.platform !== 'win32') return
   
-  const image = nativeImage.createFromPath(getIconPath())
-  tray = new Tray(image)
+  tray = new Tray(getIconPath())
 
   tray.on('click', () => client.win.show())
 
@@ -22,7 +20,7 @@ function updateTrayMenu() {
   tray.setContextMenu(contextMenu)
 }
 
-function getMenuTemplate () {
+function getMenuTemplate() {
   return [
     {
       label: '종료',
@@ -32,9 +30,10 @@ function getMenuTemplate () {
 }
 
 function getIconPath () {
+  const appIcon = path.join(__dirname, '..', '..', '/build/icons/icon')
   return process.platform === 'win32'
-    ? config.APP_ICON + '.ico'
-    : config.APP_ICON + '.png'
+    ? appIcon + '.ico'
+    : appIcon + '.png'
 }
 
 function hasTray() {
