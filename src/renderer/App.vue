@@ -35,7 +35,7 @@
   }
 </script>
 
-<style lang='scss'>
-@import '~@/assets/stylesheets/main.scss';
+<style>
+  @import './assets/stylesheets/base.css';
 </style>
 

@@ -1,11 +1,11 @@
 import { app } from 'electron'
-import Store from '../Store'
-import client from './client'
-import webTorrent from './webTorrent'
-import streaming from './streaming'
-import ipc from '../ipc'
-import tray from '../tray'
-import menu from '../menu'
+import client from './windows/client'
+import webTorrent from './windows/webTorrent'
+import streaming from './windows/streaming'
+import Store from './Store'
+import ipc from './ipc'
+import tray from './tray'
+import menu from './menu'
 
 const defaults = {
   downloads: app.getPath('downloads'),
