@@ -492,6 +492,12 @@ svg {
   font-size: 14px;
   line-height: 20px;
 }
+.settings-box textarea::-webkit-scrollbar {
+  width: 8px;
+}
+.settings-box textarea::-webkit-scrollbar-track {
+  width: 8px;
+}
 .modal-body dd button {
   min-width: 110px;
   height: 30px;

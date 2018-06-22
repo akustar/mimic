@@ -122,4 +122,7 @@
   .detail .table table tbody tr:hover {
     background-color: rgba(0,0,0,.3);
   }
+  .poster .detail .table table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }  
 </style>
