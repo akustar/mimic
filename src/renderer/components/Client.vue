@@ -27,20 +27,19 @@
         <!-- 액션 -->
         <actions :torrentKey="key"></actions>
         <!-- 디테일 -->
-        <detail v-if="currentKey === key" :torrentKey="key" :fileProg="torrent.fileProg"></detail>
+        <detail v-if="currentKey === key" :torrentKey="key" :fileProg="torrent.fileProg"></detail>        
       </div>
+  
+      <!-- 모달: 토렌트 파일 추가 -->
+      <md-file v-if="parseResults.length > 0" :parseResults="parseResults"></md-file>
+      <!-- 모달: 마그넷 추가 -->
+      <md-magnet v-if="magnetIsShow" @close="magnetIsShow = false" @loader="loader = true"></md-magnet>
+      <!-- 모달: 시드 추가 -->
+      <md-seed v-if="seedIsShow" :seedPath="seedPath" @close="seedIsShow = false"></md-seed>
     </main>
     <footer>
 
     </footer>
-
-    <!-- 모달: 토렌트 파일 추가 -->
-    <md-file v-if="parseResults.length > 0" :parseResults="parseResults"></md-file>
-    <!-- 모달: 마그넷 추가 -->
-    <md-magnet v-if="magnetIsShow" @close="magnetIsShow = false" @loader="loader = true"></md-magnet>
-    <!-- 모달: 시드 추가 -->
-    <md-seed v-if="seedIsShow" :seedPath="seedPath" @close="seedIsShow = false"></md-seed>
-
     <transition name="opacity">
       <div class="overlay" v-if="loader">
         <span class="spinner"></span>
