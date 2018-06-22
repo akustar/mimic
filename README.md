@@ -25,7 +25,8 @@
   * ~~AirPlay, Chromecast~~
 * 웹 브라우저에 연결하기 위한 [WebTorrent](https://github.com/webtorrent/webtorrent)프로토콜 지원
 
-※ 진행 상황: 60%
+※ 진행 상황: 60%  
+[Youtube](https://www.youtube.com/watch?v=ZkS1ClJZkH8)
 
 ### 설치
 
