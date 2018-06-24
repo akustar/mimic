@@ -66,7 +66,7 @@
   import MdSeed from './Client/Modal/Seed'
 
   export default {
-    data() {
+    data () {
       return {
         progress: {
           torrents: null,
@@ -82,7 +82,7 @@
         magnetIsShow: false
       }
     },
-    mounted() {
+    mounted () {
       // 프로그램 재시작시 연결되어있던 토렌트에 다시 연결합니다.
       this.reconnect()
       // 메인 프로세스에서 메세지가 오길 기다립니다.
@@ -117,7 +117,6 @@
           for (const parse of parseResults) {
             this.parseResults.push(parse)
           }
-
           this.loader = false
         })
 
@@ -131,47 +130,50 @@
 
         // 에러
         ipcRenderer.on('wt-error', (event, message) => {
-          switch (message) {
-            case 'Invalid torrent identifier':
-              this.toasted('파일을 찾을 수 없습니다')
-            break
-            case 'Identifier expected':
-              this.toasted('잘못된 마그넷 주소 입니다')
-            break
-            case 'Timeout':
-              this.toasted('시간초과: 잘못된 마그넷 주소 입니다')
-            break
-            default:
-              if (message.indexOf('duplicate') > -1) this.toasted('같은 이름의 토렌트가 이미 존재합니다')
-              else this.toasted('에러')
+          if (message.indexOf('duplicate') > -1) {
+            this.toasted('같은 이름의 토렌트가 이미 존재합니다')
           }
-
+          else {
+            switch (message) {
+              case 'Invalid torrent identifier':
+                this.toasted('파일을 찾을 수 없습니다')
+              break
+              case 'Identifier expected':
+                this.toasted('잘못된 마그넷 주소 입니다')
+              break
+              case 'Timeout':
+                this.toasted('시간초과: 잘못된 마그넷 주소 입니다')
+              break
+              default:
+                this.toasted('에러')
+            }
+          }
           this.loader = false
         })
       },
       // 토렌트 분석을 시작합니다.
       parseTorrentFile (paths) {
-        this.loader = true
-        
         ipcRenderer.send('wt-parse-torrent', paths)
+
+        this.loader = true
       },
-      pasteTorrent(event) {
+      pasteTorrent (event) {
         const editableHtmlTags = new Set(['input', 'textarea'])
         const tagName = event.target.tagName.toLowerCase()
         const torrentId = clipboard.readText().trim()
-
+        
         if (this.isModalShow || editableHtmlTags.has(tagName) || !torrentId) return
 
         this.identifierTorrent(torrentId)
       },
       // 마그넷 링크 분석을 위해 웹토렌트 페이지로 파일의 경로를 전송합니다
       identifierTorrent (torrentId) {
-        this.loader = true
+        this.loader = true 
         
         ipcRenderer.send('wt-identifier-torrent', torrentId)
       },
       // 토렌트 파일을 추가 합니다.
-      addTorrentFile() {
+      addTorrentFile () {
         const currentWin = remote.getCurrentWindow()
         const options = {  
           properties: ['openFile', 'multiSelections'],
@@ -186,8 +188,7 @@
         })
       },
       // 토렌트 파일 또는 시드 파일을 드래그 앤 드롭 합니다.
-      dragDropTorrent(files, pos, fileList, directories) {
-        // 드롭 된 파일중 폴더가 있는지 확인 합니다.
+      dragDropTorrent (files, pos, fileList, directories) {
         const tPaths = []
         const sPaths = []
         
@@ -209,12 +210,12 @@
           this.seedIsShow = true
         }
       },
-      poster(posterFilePath) {
+      poster (posterFilePath) {
         if (posterFilePath) {
           return `backgroundImage: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), url('file://${posterFilePath.replace(/\\/g, '/')}')`
         }
       },
-      toasted(message) {
+      toasted (message) {
         this.$toasted.show(message, {
           type : 'error',
           action: {
@@ -225,7 +226,7 @@
       }
     },
     computed: {
-      isModalShow() {
+      isModalShow () {
         return this.seedIsShow || this.magnetIsShow || this.parseResults.length > 0
       }
     },
