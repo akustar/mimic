@@ -72,6 +72,7 @@
   import Bitfield from 'bitfield'
   import dragDrop from 'drag-drop'
   import stringSimilarity from 'string-similarity';
+  
   // components
   import Titlebar from './Player/Titlebar'
 
@@ -107,13 +108,13 @@
         isMouseOver: false,
       }
     },
-    mounted() {
+    mounted () {
       this.ipc()
 
       this.initEvents()
     },
     methods: {
-      ipc() {
+      ipc () {
         ipcRenderer.on('did-finish-load', (event, winIndex, infoHash, mediaName, mediaIndex, torrentKey) => {
           this.mediaName = mediaName
           this.mediaIndex = mediaIndex
@@ -132,7 +133,7 @@
           this.renderLoadingParts(progress)
         })
       },
-      initEvents() {
+      initEvents () {
         // 자막 드래그 업로드
         dragDrop('body', this.dragDropSubtitles)
 
@@ -214,30 +215,41 @@
           }
         })                
       },
-      load() {
-        
+      toasted (message) {
+        this.$toasted.show(message, {
+          type : 'error',
+          duration: 0,
+          action: {
+            text: '확인',
+            onClick: (event, toastObject) => {
+              toastObject.goAway(0)
+            }
+          }
+        })
+        this.isStalled = false
+        this.localURL = ''
       },
-      canPlay() {
+      canPlay () {
         if (this.type === 'video' && this.$refs.media.webkitVideoDecodedByteCount === 0) {
-          console.log('지원되지 않는 비디오 형식')
+          this.toasted('죄송합니다 지원되지 않는 비디오 형식입니다')
         } else if (this.$refs.media.webkitAudioDecodedByteCount === 0) {
-          console.log('지원되지 않는 오디오 형식')
+          this.toasted('죄송합니다 지원되지 않는 오디오 형식입니다')
         }
       },
-      loadedmetadata() {
+      loadedmetadata () {
         this.duration = this.$refs.media.duration
         this.isStalled = false
         
         this.play()
       },
-      stalled() {
+      stalled () {
         this.isStalled = true
       },
-      error(error) {
-        console.log('죄송합니다. 해당 파일을 재생할 수 없습니다.', error)
+      error (error) {
+        this.toasted('죄송합니다 해당 파일을 재생할 수 없습니다')
       },
       // 미디어 재생 위치 업데이트
-      timeupdate() {
+      timeupdate () {
         if(this.isDragging) {
           return
         }
@@ -247,19 +259,19 @@
         this.time = this.$refs.media.currentTime
       },
       // 미디어를 재생합니다.
-      play() {
+      play () {
         this.sendMessage('재생')
         this.isPaused = false
         this.$refs.media.play()
       },
       // 미디어를 일시정지 합니다.
-      pause() {
+      pause () {
         this.sendMessage('일시정지')
         this.isPaused = true
         this.$refs.media.pause()
       },
       // 재생/일시정지 토글
-      togglePlay() {
+      togglePlay () {
         if(this.isPaused) {
           this.play()
         }
@@ -268,17 +280,17 @@
         }        
       },
       // 미디어가 끝까지 재생됐을 경우 미디어를 일시정지 시킵니다.
-      ended() {
+      ended () {
         this.pause()
       },
-      handleTimeupdate(event) {
+      handleTimeupdate (event) {
         this.isDragging = true
         const rect = this.$refs.playbackBar.getBoundingClientRect()
         this.time = Math.min(Math.max((event.clientX - rect.left) / rect.width * this.duration, 0), this.duration)
       },
       // 음소거/음소거 해제
-      toggleMute() {
-        if(this.isMuted) {
+      toggleMute () {
+        if (this.isMuted) {
           this.isMuted = false
           this.sendMessage('음소거 해제')
         }
@@ -288,33 +300,33 @@
         }
       },
       // 앞으로 가기
-      skipNext() {
+      skipNext () {
         this.sendMessage(`5초 앞으로 / ${this.currentTime}`)
         this.$refs.media.currentTime += 5
       },
       // 뒤로가기
-      skipPrev() {
+      skipPrev () {
         this.sendMessage(`5초 뒤로 / ${this.currentTime}`)
         this.$refs.media.currentTime -= 5
       },
       // 볼륨 키우기
-      volumeUp() {
+      volumeUp () {
         this.volume = Math.min(Number(this.volume) + 5, 100)
         this.sendMessage(`볼륨: ${this.volume}%`)
       },
       // 볼륨 줄이기
-      volumeDown() {
+      volumeDown () {
         this.volume = Math.max(Number(this.volume) - 5, 0)
         this.sendMessage(`볼륨: ${this.volume}%`)
       },
-      sendMessage(message) {
+      sendMessage (message) {
         this.message = message
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           this.message = ''
         }, 3 * 1000)
       },
-      mouseObserver() {
+      mouseObserver () {
         this.noCursor = false
         clearTimeout(this.mouseTimer)
         if (event.target.closest('.titlebar, .status, .control') === null) {  
@@ -326,12 +338,12 @@
           }, 2 * 1000)
         }
       },
-      fullScreen() {
+      fullScreen () {
 				this.isFullScreen = !this.win.isFullScreen()
 				this.win.setFullScreen(this.isFullScreen)
       },
       // 자막 파일을 업로드 합니다.
-      openSubtitles() {
+      openSubtitles () {
         remote.dialog.showOpenDialog({
           title: '자막 파일을 선택하세요.',
           filters: [{ name: 'Subtitles', extensions: ['vtt', 'lrc', 'smi', 'ssa', 'ass', 'sub', 'srt', 'sbv', 'json'] }],
@@ -343,7 +355,7 @@
         })
       },
       // 자막 파일을 드래그 앤 드롭 동작으로 추가합니다.
-      dragDropSubtitles(files) {
+      dragDropSubtitles (files) {
         // 첫번째 파일만 받겠습니다.
         const file = files[0]
         // 자막 파일인지 확인합니다.
@@ -352,7 +364,7 @@
         }
       },
       // 자막을 추가합니다.
-      appendMediaTrack(path) {
+      appendMediaTrack (path) {
         const track = document.createElement('track')
 
         if (this.$refs.media.firstChild) {
@@ -370,17 +382,15 @@
 
         this.sendMessage('자막 추가 됨')
       },
-      renderLoadingParts(progress) {
-        if (!progress) return
+      renderLoadingParts (progress) {
+        if (!progress && !progress.torrents[this.torrentKey]) return
 
         let lastPiecePresent = false
         const loadingParts = []
         const torrent = progress.torrents[this.torrentKey]
-
-        if (!torrent) return
-
         const fileProg = torrent.fileProg[this.mediaIndex]
 
+        // 기존에 들어있던 내용 지움.
         while (this.loadingParts.length > 0) this.loadingParts.pop()
 
         for (let i = fileProg.startPiece; i <= fileProg.endPiece; i++) {
@@ -400,15 +410,15 @@
           })
         })
       },
-      zeroFill(n) {
+      zeroFill (n) {
         return ('0' + n).slice(-2)
       }     
     },
     watch: {
-      volume() {
+      volume () {
         this.$refs.media.volume = this.volume / 100
       },
-      isFullScreen() {
+      isFullScreen () {
         if (this.isFullScreen) {
           setTimeout(() => {
             this.transition = false
@@ -417,23 +427,23 @@
       }
     },
     computed: {
-      progressFilled() {
+      progressFilled () {
         return `scaleX(${this.time / this.duration})`
       },
-      progressCursor() {
+      progressCursor () {
         return `calc(${this.time / this.duration * 100}% - 7px)`
       },
-      progressVolume() {
+      progressVolume () {
         return `${(this.volume * 100) / 100}% 100%`
       },
-      currentTime() {
+      currentTime () {
         const hours = this.zeroFill(Math.floor(this.time / 3600))
         const minutes = this.zeroFill(Math.floor(this.time % 3600 / 60))
         const second = this.zeroFill(Math.floor(this.time % 3600 % 60))
 
         return `${hours}:${minutes}:${second}`
       },
-      totalTime() {
+      totalTime () {
         const totalHours = this.zeroFill(Math.floor(this.duration / 3600))
         const totalMinutes = this.zeroFill(Math.floor(this.duration % 3600 / 60))
         const totalSecond = this.zeroFill(Math.floor(this.duration % 3600 % 60))
@@ -499,6 +509,7 @@
     left: 0; 
     right: 0;
     bottom: 0;
+    z-index: 10;
     display: flex;
     flex-flow: row wrap;
     padding-top: 40px;

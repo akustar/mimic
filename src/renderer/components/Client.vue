@@ -94,13 +94,14 @@
     },
     methods: {
       // 프로그램 재시작시 연결되어있던 토렌트에 다시 연결합니다.
-      reconnect() {
+      reconnect () {
         const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
         // 토렌트가 연결되기까지 약간의 시간이 걸리므로 사용자에게 먼저 저장된 정보를 보여줍니다.
         this.progress.torrents = torrentSummary
 
         for (const key in torrentSummary) {
           const { torrentFileName, posterFileName, selections, infoHash, path:downloadPath, } = torrentSummary[key]
+
           const torrentFilePath = torrentFileName ? path.join(config.TORRENT_PATH, torrentFileName) : ''
           const posterFilePath = posterFileName ? path.join(config.POSTER_PATH, posterFileName) : ''
 
@@ -110,16 +111,11 @@
           })
         }
       },
-      ipc() {
+      ipc () {
         // 분석된 토렌트 정보를 받아 다운로드를 받기 위한 모달을 띄웁니다.
         ipcRenderer.on('wt-parse-result', (event, parseResults) => {
-          if (this.parseResults.length > 0) {
-            for (const parse of parseResults) {
-              this.parseResults.push(parse)
-            }
-          }
-          else {
-            this.parseResults = parseResults
+          for (const parse of parseResults) {
+            this.parseResults.push(parse)
           }
 
           this.loader = false
@@ -135,56 +131,45 @@
 
         // 에러
         ipcRenderer.on('wt-error', (event, message) => {
-          const toasted = (message) => {
-            this.$toasted.show(message, {
-              type : 'error',
-              action: {
-                text: '확인',
-                onClick: (event, toastObject) => toastObject.goAway(0)
-              }
-            })
-          }
-
           switch (message) {
             case 'Invalid torrent identifier':
-              toasted('파일을 찾을 수 없습니다')
+              this.toasted('파일을 찾을 수 없습니다')
             break
             case 'Identifier expected':
-              toasted('잘못된 마그넷 주소 입니다')
+              this.toasted('잘못된 마그넷 주소 입니다')
             break
             case 'Timeout':
-              toasted('시간초과: 잘못된 마그넷 주소 입니다')
+              this.toasted('시간초과: 잘못된 마그넷 주소 입니다')
             break
             default:
-              if (message.indexOf('duplicate') > -1) toasted('같은 이름의 토렌트가 이미 존재합니다')
-              else toasted('에러')
+              if (message.indexOf('duplicate') > -1) this.toasted('같은 이름의 토렌트가 이미 존재합니다')
+              else this.toasted('에러')
           }
 
           this.loader = false
         })
       },
       // 토렌트 분석을 시작합니다.
-      parseTorrentFile(paths) {
+      parseTorrentFile (paths) {
         this.loader = true
         
         ipcRenderer.send('wt-parse-torrent', paths)
       },
-      pasteTorrent() {
+      pasteTorrent(event) {
         const editableHtmlTags = new Set(['input', 'textarea'])
-
-        if (editableHtmlTags.has(event.target.tagName.toLowerCase()) ||
-        this.seedIsShow || this.magnetIsShow || this.parseResults.length > 0) return
-
+        const tagName = event.target.tagName.toLowerCase()
         const torrentId = clipboard.readText().trim()
 
-        if (torrentId) this.identifierTorrent(torrentId)
+        if (this.isModalShow || editableHtmlTags.has(tagName) || !torrentId) return
+
+        this.identifierTorrent(torrentId)
       },
       // 마그넷 링크 분석을 위해 웹토렌트 페이지로 파일의 경로를 전송합니다
-      identifierTorrent(torrentId) {
+      identifierTorrent (torrentId) {
         this.loader = true
         
         ipcRenderer.send('wt-identifier-torrent', torrentId)
-      },      
+      },
       // 토렌트 파일을 추가 합니다.
       addTorrentFile() {
         const currentWin = remote.getCurrentWindow()
@@ -228,6 +213,20 @@
         if (posterFilePath) {
           return `backgroundImage: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), url('file://${posterFilePath.replace(/\\/g, '/')}')`
         }
+      },
+      toasted(message) {
+        this.$toasted.show(message, {
+          type : 'error',
+          action: {
+            text: '확인',
+            onClick: (event, toastObject) => toastObject.goAway(0)
+          }
+        })
+      }
+    },
+    computed: {
+      isModalShow() {
+        return this.seedIsShow || this.magnetIsShow || this.parseResults.length > 0
       }
     },
     components: {
