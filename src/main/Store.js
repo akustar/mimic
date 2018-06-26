@@ -4,7 +4,7 @@ import fs from 'fs'
 import mkdirp from 'mkdirp'
 
 class Store {
-  constructor(defaults) {
+  constructor(defaults = {}) {
     this.path = path.join(config.CONFIG_PATH, 'config.json')
     this.data = Object.assign(defaults, parseDataFile(this.path, defaults))
   }

@@ -19,8 +19,8 @@ const store = new Store(defaults)
 
 app.on('ready', () => {
   client.create(store)
-  webTorrent.create()
-  
+  webTorrent.create('', 'identifier')
+
   menu.init()
   tray.create()
 
@@ -36,4 +36,3 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   client.win.show()
 })
-

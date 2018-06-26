@@ -65,12 +65,12 @@
         this.summary.selections[fileIndex] = !this.summary.selections[fileIndex]
 
         ipcRenderer.send('set', 'torrents', this.torrentSummary)
-        ipcRenderer.send('wt-select-files', this.summary.infoHash, this.summary.selections)
+        ipcRenderer.send('wt-select-files', this.torrentKey, this.summary.infoHash, this.summary.selections)
       },
       openFile(file, fileIndex) {
         // 재생할 수 있는 파일인지 확인합니다.
         if (fileExtension.isPlayable(file)) {
-          ipcRenderer.send('wt-create-streaming', this.summary.infoHash, file.name, fileIndex, this.torrentKey)
+          ipcRenderer.send('wt-start-streaming', this.torrentKey, this.summary.infoHash, file.name, fileIndex)
         }
         // 재생 파일이 아닌 경우
         // 실행을 시킬지 폴더만 열어줄지..
@@ -95,6 +95,9 @@
   .detail .checkbox-slider{
     display: block;
     margin-left: auto;
+  }
+  .detail button {
+    color: #fff;
   }
   .detail .table table {
     table-layout: fixed
@@ -124,5 +127,5 @@
   }
   .poster .detail .table table tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.2);
-  }  
+  }
 </style>

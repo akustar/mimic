@@ -151,8 +151,10 @@
           .split('\n')
           .map(s => s.trim())
           .filter(s => s !== '')
+        const torrentKey = this.uniqueKey()
+
         const options = {
-          torrentKey: this.uniqueKey(),
+          torrentKey,
           name: this.options.name,
           announce: announceList,
           private: this.options.isPrivate,
@@ -160,7 +162,15 @@
           selections: this.options.selections
         }
 
-        ipcRenderer.send('wt-create-torrent', this.options.path, options)
+        // 토렌트 다운로드 시작
+        ipcRenderer.send('wt-create-torrent', torrentKey, this.options.path, options)
+        // 토렌트가 연결되기 까지 시간이 걸리므로 연결되지않은 토렌트 정보를 먼저 보여줍니다
+        this.tempTorrent({
+          name: this.options.name,
+          key: torrentKey,
+          status: '연결 대기 중'
+        })
+        // 모달을 닫습니다
         this.close()
       },
       close () {
@@ -169,6 +179,9 @@
       // From: https://stackoverflow.com/a/38872723
       revisedRandId () {
         return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
+      },
+      tempTorrent (torrent) {
+        this.$emit('tempTorrent', torrent)
       },      
       uniqueKey () {
         const randomKey = this.revisedRandId()

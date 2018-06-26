@@ -37,7 +37,7 @@
         return (persent || 0).toFixed(1)
       },
       status() {
-        return this.torrent.progress === 1 ? '업로드 중' : '다운로드 중'
+        return this.torrent.status || (this.torrent.progress === 1 ? '업로드 중' : '다운로드 중')
       },
       numPeers() {
         return this.torrent.numPeers || 0

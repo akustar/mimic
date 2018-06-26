@@ -17,25 +17,29 @@
     <div class="main">
       <div
           class="torrent"
-          v-for="(torrent, key) in progress.torrents" :key="key"
-          :class="{active: currentKey === key, poster: torrent.posterFilePath}"
+          v-for="(torrent, torrentKey) in torrents" :key="torrentKey"
+          :class="{ active: currentKey === torrentKey, poster: torrent.posterFilePath }"
           :style="poster(torrent.posterFilePath)"
-          @click="currentKey === key ? currentKey = '' : currentKey = key"
+          @click="currentKey === torrentKey ? currentKey = '' : currentKey = torrentKey"
         >
         <!-- 메타데이타 -->
         <metadata :torrent="torrent"></metadata>
+        
         <!-- 액션 -->
-        <actions :torrentKey="key"></actions>
+        <actions :torrentKey="torrentKey" @stopTorrent="stopTorrent"></actions>
+
         <!-- 디테일 -->
-        <detail v-if="currentKey === key" :torrentKey="key" :fileProg="torrent.fileProg"></detail>        
+        <detail v-if="currentKey === torrentKey" :torrentKey="torrentKey" :fileProg="torrent.fileProg"></detail>        
       </div>
   
       <!-- 모달: 토렌트 파일 추가 -->
-      <md-file v-if="parseResults.length > 0" :parseResults="parseResults"></md-file>
+      <md-file v-if="fileIsShow" @close="fileIsShow = false" @tempTorrent="tempTorrent" :parse="parse" :infoHashList="infoHashList"></md-file>
+
       <!-- 모달: 마그넷 추가 -->
       <md-magnet v-if="magnetIsShow" @close="magnetIsShow = false" @loader="loader = true"></md-magnet>
+
       <!-- 모달: 시드 추가 -->
-      <md-seed v-if="seedIsShow" :seedPath="seedPath" @close="seedIsShow = false"></md-seed>
+      <md-seed v-if="seedIsShow" @close="seedIsShow = false" @tempTorrent="tempTorrent" :seedPath="seedPath"></md-seed>
     </div>
     <div class="footer">
 
@@ -53,6 +57,7 @@
   import fs from 'fs'
   import path from 'path'
   import dragDrop from 'drag-drop'
+  import parseTorrent from 'parse-torrent'
   import fileExtension from '../lib/file-extension'
   import config from '../../config'
 
@@ -68,17 +73,16 @@
   export default {
     data () {
       return {
-        progress: {
-          torrents: null,
-          progress: 0,
-          hasActiveTorrents: false
-        },
-        parseResults: [],
+        torrents: {},
+        infoHashList: [],
+        parse: [],
+
         currentKey: '',
+        seedPath: '',
 
         loader: false,
-        seedPath: '',
         seedIsShow: false,
+        fileIsShow: false,
         magnetIsShow: false
       }
     },
@@ -90,44 +94,43 @@
       // 마그넷 링크 붙여넣기 이벤트
       document.addEventListener('paste', this.pasteTorrent)      
       // 토렌트 파일 또는 시드 파일을 드래그 앤 드롭 합니다.
-      dragDrop('body', this.dragDropTorrent) 
+      dragDrop('body', this.dragDropTorrent)
     },
     methods: {
       // 프로그램 재시작시 연결되어있던 토렌트에 다시 연결합니다.
       reconnect () {
         const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
-        // 토렌트가 연결되기까지 약간의 시간이 걸리므로 사용자에게 먼저 저장된 정보를 보여줍니다.
-        this.progress.torrents = torrentSummary
 
-        for (const key in torrentSummary) {
-          const { torrentFileName, posterFileName, selections, infoHash, path:downloadPath, } = torrentSummary[key]
+        for (const torrentKey in torrentSummary) {
+          const summary = torrentSummary[torrentKey]
+          const {infoHash, downloadPath, selections, torrentFilePath, posterFilePath} = summary
 
-          const torrentFilePath = torrentFileName ? path.join(config.TORRENT_PATH, torrentFileName) : ''
-          const posterFilePath = posterFileName ? path.join(config.POSTER_PATH, posterFileName) : ''
+          // 포스터 파일이 존재하는지 체크
+          fs.stat(posterFilePath, (error) => { if (error) summary.posterFilePath = '' })
 
-          fs.stat(torrentFilePath, (error, stat) => {
+          // 토렌트 파일이 존재하는지 체크
+          fs.stat(torrentFilePath, (error) => {
             const torrentId = !error ? torrentFilePath : infoHash
-            ipcRenderer.send('wt-start-torrent', torrentId, downloadPath, key, selections, posterFilePath)
+
+            // 토렌트가 연결되기 까지 시간이 걸리므로 저장해 둔 토렌트 정보를 먼저 보여줍니다
+            summary.key = torrentKey
+            this.tempTorrent(summary)
+
+            // 토렌트 다운로드 시작
+            ipcRenderer.send('wt-start-torrent', torrentKey, torrentId, downloadPath, selections, posterFilePath)
           })
         }
       },
       ipc () {
-        // 분석된 토렌트 정보를 받아 다운로드를 받기 위한 모달을 띄웁니다.
-        ipcRenderer.on('wt-parse-result', (event, parseResults) => {
-          for (const parse of parseResults) {
-            this.parseResults.push(parse)
-          }
-          this.loader = false
-        })
-
         // 토렌트 요약 정보를 받습니다.
-        ipcRenderer.on('wt-progress', (event, progress) => {
-          this.$set(this.progress, 'torrents', progress.torrents)
-
-          // 재생중인 미디어에 토렌트 정보를 보냅니다.
-          ipcRenderer.send('wt-loading-parts', progress)
+        ipcRenderer.on('wt-progress', (event, torrent) => {
+          if (torrent) this.$set(this.torrents, torrent.key, torrent)
         })
-
+        ipcRenderer.on('wt-parse-result', (event, parse) => {
+          this.parse = parse
+          this.loader = false
+          this.fileIsShow = true
+        })
         // 에러
         ipcRenderer.on('wt-error', (event, message) => {
           if (message.indexOf('duplicate') > -1) {
@@ -148,14 +151,21 @@
                 this.toasted('에러')
             }
           }
+
           this.loader = false
         })
+      },
+      // 토렌트 임시저장소
+      tempTorrent (torrent) {
+        // 토렌트 중복체크를 위해 infoHash 정보를 저장해둡니다.
+        this.infoHashList.push(torrent.infoHash)
+        // 토렌트에 연결되기까지 약간의 시간이 걸리므로 사용자에게 미리 토렌트 정보를 보여줍니다.
+        this.$set(this.torrents, torrent.key, torrent)
       },
       // 토렌트 분석을 시작합니다.
       parseTorrentFile (paths) {
         ipcRenderer.send('wt-parse-torrent', paths)
-
-        this.loader = true
+        this.fileIsShow = true
       },
       pasteTorrent (event) {
         const editableHtmlTags = new Set(['input', 'textarea'])
@@ -168,8 +178,8 @@
       },
       // 마그넷 링크 분석을 위해 웹토렌트 페이지로 파일의 경로를 전송합니다
       identifierTorrent (torrentId) {
-        this.loader = true 
-        
+        this.loader = true
+
         ipcRenderer.send('wt-identifier-torrent', torrentId)
       },
       // 토렌트 파일을 추가 합니다.
@@ -186,6 +196,13 @@
           
           this.parseTorrentFile(paths)
         })
+      },
+      stopTorrent (torrentKey) {
+        const infoHash = this.torrents[torrentKey].infoHash
+        const findIndex = this.infoHashList.findIndex(h => h === infoHash)
+        this.infoHashList.splice(findIndex, 1)
+
+        this.$delete(this.torrents, torrentKey)
       },
       // 토렌트 파일 또는 시드 파일을 드래그 앤 드롭 합니다.
       dragDropTorrent (files, pos, fileList, directories) {
@@ -227,7 +244,7 @@
     },
     computed: {
       isModalShow () {
-        return this.seedIsShow || this.magnetIsShow || this.parseResults.length > 0
+        return this.seedIsShow || this.magnetIsShow || this.fileIsShow
       }
     },
     components: {

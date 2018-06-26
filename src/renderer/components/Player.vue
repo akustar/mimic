@@ -115,22 +115,22 @@
     },
     methods: {
       ipc () {
-        ipcRenderer.on('did-finish-load', (event, winIndex, infoHash, mediaName, mediaIndex, torrentKey) => {
+        ipcRenderer.on('did-finish-load', (event, torrentKey, index, infoHash, mediaName, mediaIndex) => {
+          this.torrentKey = torrentKey
           this.mediaName = mediaName
           this.mediaIndex = mediaIndex
           this.mediaType = fileExtension.isVideo(mediaName) ? 'video' : 'audio'
-          this.torrentKey = torrentKey
           
           // 스트리밍을 위한 서버 실행 요청
-          ipcRenderer.send('wt-start-server', infoHash, winIndex, mediaIndex)
+          ipcRenderer.send('wt-start-server', torrentKey, infoHash, index, mediaIndex)
         })
 
         // 요청한 서버가 실행되면 미디어를 재생합니다.
         ipcRenderer.on('wt-server-running', (event, localURL) => this.localURL = localURL)
-
+        
         // 다운로드 중인 토렌트 정보를 받습니다(1초마다)
-        ipcRenderer.on('wt-loading-parts', (event, progress) => {
-          this.renderLoadingParts(progress)
+        ipcRenderer.on('wt-loading-parts', (event, torrent) => {
+          this.renderLoadingParts(torrent)
         })
       },
       initEvents () {
@@ -382,12 +382,11 @@
 
         this.sendMessage('자막 추가 됨')
       },
-      renderLoadingParts (progress) {
-        if (!progress && !progress.torrents[this.torrentKey]) return
+      renderLoadingParts (torrent) {
+        if (!torrent) return
 
         let lastPiecePresent = false
         const loadingParts = []
-        const torrent = progress.torrents[this.torrentKey]
         const fileProg = torrent.fileProg[this.mediaIndex]
 
         // 기존에 들어있던 내용 지움.
