@@ -18,7 +18,17 @@ function getMenuTemplate () {
 					accelerator: process.platform === 'darwin'
 					? 'Alt+Command+I'
 					: 'Ctrl+Shift+I',
-					click: () => client.win.toggleDevTools()
+					click: (item, focusedWindow) => {
+						if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+					}
+				}
+			]
+		},
+		{
+			role: 'window',
+			submenu: [
+				{
+					role: 'close'
 				}
 			]
 		}
