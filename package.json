@@ -25,6 +25,7 @@
     "count-files": "^2.6.2",
     "debounce": "^1.1.0",
     "drag-drop": "^4.2.0",
+    "fs-extra": "^6.0.1",
     "iconv-lite": "^0.4.23",
     "jschardet": "^1.6.0",
     "material-design-icons": "^3.0.1",

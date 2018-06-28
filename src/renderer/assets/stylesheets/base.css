@@ -452,6 +452,7 @@ svg {
   align-items: center;
   border-bottom: 1px solid rgba(114, 118, 126, 0.2);
   margin-bottom: 20px;
+  padding-bottom: 10px
 }  
 .modal-body dd > .settings-box.file-list {
   margin-bottom: 0;
@@ -469,7 +470,7 @@ svg {
   margin-bottom: 8px;
 }
 .modal-body dd > .settings-box > div:first-child {
-  margin: 0 15px 10px 0;
+  margin-right: 15px;
   word-break: break-all;
 }
 .modal-body dd > .settings-box strong {
@@ -478,7 +479,10 @@ svg {
   font-weight: 500;
   color: #f6f6f7;
   letter-spacing: -0.05em;
-  margin-bottom: 4px;
+}
+.modal-body dd > .settings-box strong + span {
+  display: block;
+  margin-top: 4px
 }
 .settings-box textarea {
   width: 100%;
