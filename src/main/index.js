@@ -19,7 +19,7 @@ const defaults = {
 const store = new Store(defaults)
 
 app.on('ready', () => {
-  client.create(state)
+  client.create(store)
   webTorrent.create('', 'identifier')
 
   menu.init()

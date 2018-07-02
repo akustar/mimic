@@ -8,9 +8,9 @@ const client = {
 
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080/` : `file://${__dirname}/index.html`
 
-function create(state) {
+function create(store) {
   const win = client.win = new BrowserWindow({
-    ...state.windowBounds,
+    ...store.get('windowBounds'),
     title: 'MIMIC',
     minWidth: 360,
     minHeight: 290,
@@ -33,10 +33,10 @@ function create(state) {
   win.on('blur', () => win.webContents.send('blur'))
 
   win.on('resize', debounce(event => {
-    state.windowBounds = Object.assign(state.windowBounds, event.sender.getBounds())
+    store.set('windowBounds', event.sender.getBounds())
   }, 250))
   win.on('move', debounce(event => {
-    state.windowBounds = Object.assign(state.windowBounds, event.sender.getBounds())
+    store.set('windowBounds', event.sender.getBounds())
   }, 250))
 
   win.on('close', () => {
