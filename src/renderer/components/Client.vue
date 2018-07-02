@@ -41,6 +41,7 @@
       <!-- 모달: 시드 추가 -->
       <md-seed v-if="seedIsShow" @close="seedIsShow = false" @tempTorrent="tempTorrent" :seedPath="seedPath"></md-seed>
 
+      <!-- 모달: 사용자 설정 -->
       <md-preferences v-if="preferencesIsShow" @close="preferencesIsShow = false"></md-preferences>
     </div>
     <div class="footer">

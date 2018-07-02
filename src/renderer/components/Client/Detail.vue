@@ -73,9 +73,8 @@
           ipcRenderer.send('wt-start-streaming', this.torrentKey, this.summary.infoHash, file.name, fileIndex)
         }
         // 재생 파일이 아닌 경우
-        // 실행을 시킬지 폴더만 열어줄지..
         else {
-          shell.showItemInFolder(path.join(this.summary.path, file.path))
+          shell.openExternal(path.join(this.summary.downloadPath, file.path))
         }
       },
       prettyBytes(num = 0) {

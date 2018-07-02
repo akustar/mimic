@@ -3,7 +3,7 @@ import fs from 'fs'
 import config from '../config'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import rimraf from 'rimraf'
+import trash from 'trash'
 import parseTorrent from 'parse-torrent'
 import WebTorrent from 'webtorrent'
 import deepEqual from 'deep-equal'
@@ -147,7 +147,7 @@ function identifierTorrent(torrentId) {
           // 토렌트를 분석합니다.
           parseTorrentFile([torrentFilePath])
           // 토렌트 분석이 완료되었고 client페이지로 정보를 보냈다면 임시로 저장한 토렌트를 삭제합니다.
-          deleteFile([torrentFilePath, downloadFilePath])
+          trash([torrentFilePath, downloadFilePath])
 
           // 토렌트 삭제
           torrent.destroy()
@@ -266,9 +266,8 @@ function stopTorrent (torrentKey, isAll = '') {
     // 다음 재시작을 위해 저장해두었던 토렌트 정보 제거
     delete torrentSummary[torrentKey]
     ipcRenderer.send('set', 'torrents', torrentSummary)
-    // 토렌트 파일, 포스터 제거
-    deleteFile(deleteFiles, () => {
-      // 토렌트 정보를 모두 제거 했다면 현재 윈도우를 닫습니다.
+    // 파일 삭제
+    trash(deleteFiles).then(() => {
       currentWindow.close()
     })
   }
@@ -377,17 +376,6 @@ function selectFiles (torrentOrInfoHash, selections) {
       file.select()
     } else {
       file.deselect()
-    }
-  }
-}
-
-function deleteFile (paths, callback) {
-  for (const path of paths) {
-    if (path) {
-      rimraf(path, (error) => {
-        if (error) console.log('파일 삭제 실패 %o', error)
-        if (typeof callback === 'function') callback()
-      })
     }
   }
 }

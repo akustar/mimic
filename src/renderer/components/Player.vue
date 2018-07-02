@@ -230,7 +230,7 @@
         this.localURL = ''
       },
       canPlay () {
-        if (this.type === 'video' && this.$refs.media.webkitVideoDecodedByteCount === 0) {
+        if (this.mediaType === 'video' && this.$refs.media.webkitVideoDecodedByteCount === 0) {
           this.toasted('죄송합니다 지원되지 않는 비디오 형식입니다')
         } else if (this.$refs.media.webkitAudioDecodedByteCount === 0) {
           this.toasted('죄송합니다 지원되지 않는 오디오 형식입니다')
