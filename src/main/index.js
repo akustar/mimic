@@ -6,6 +6,7 @@ import Store from './Store'
 import ipc from './ipc'
 import tray from './tray'
 import menu from './menu'
+import state from '../renderer/lib/state'
 
 const defaults = {
   downloads: app.getPath('downloads'),
@@ -18,7 +19,7 @@ const defaults = {
 const store = new Store(defaults)
 
 app.on('ready', () => {
-  client.create(store)
+  client.create(state)
   webTorrent.create('', 'identifier')
 
   menu.init()

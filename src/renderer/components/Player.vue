@@ -272,7 +272,7 @@
       },
       // 재생/일시정지 토글
       togglePlay () {
-        if(this.isPaused) {
+        if (this.isPaused) {
           this.play()
         }
         else {

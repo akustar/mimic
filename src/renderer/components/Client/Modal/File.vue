@@ -2,7 +2,7 @@
   <transition name="scale">
     <div class="modal">
       <transition-group name="opacity" tag="div">
-        <div class="modal-container" v-for="(torrent, index) in parse" :key="index">
+        <div class="modal-container" v-for="(torrent, index) in parsed" :key="index">
           <div class="modal-inner">
             <div class="modal-header">
               <h3>{{ torrent.name }}</h3>
@@ -112,7 +112,7 @@
   
   export default {
     props: [
-      'parse',
+      'parsed',
       'infoHashList'
     ],
     data () {
@@ -146,9 +146,9 @@
         this.close(index)
       },
       close (index) {
-        this.parse.splice(index, 1)
+        this.parsed.splice(index, 1)
 
-        if (this.parse.length <= 0) this.$emit('close')
+        if (this.parsed.length <= 0) this.$emit('close')
       },
       tempTorrent (torrent) {
         this.$emit('tempTorrent', torrent)

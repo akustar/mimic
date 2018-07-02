@@ -33,7 +33,7 @@
       </div>
   
       <!-- 모달: 토렌트 파일 추가 -->
-      <md-file v-if="fileIsShow" @close="fileIsShow = false" @tempTorrent="tempTorrent" :parse="parse" :infoHashList="infoHashList"></md-file>
+      <md-file v-if="fileIsShow" @close="fileIsShow = false" @tempTorrent="tempTorrent" :parsed="parsed" :infoHashList="infoHashList"></md-file>
 
       <!-- 모달: 마그넷 추가 -->
       <md-magnet v-if="magnetIsShow" @close="magnetIsShow = false" @loader="loader = true"></md-magnet>
@@ -78,7 +78,7 @@
       return {
         torrents: {},
         infoHashList: [],
-        parse: [],
+        parsed: [],
 
         currentKey: '',
         seedPath: '',
@@ -130,14 +130,15 @@
         ipcRenderer.on('wt-progress', (event, torrent) => {
           if (torrent) this.$set(this.torrents, torrent.key, torrent)
         })
-        ipcRenderer.on('wt-parse-result', (event, parse) => {
-          this.parse = parse
+        ipcRenderer.on('wt-parsed', (event, parsed) => {
+          this.parsed = parsed
+
           this.loader = false
           this.fileIsShow = true
         })
         // 에러
         ipcRenderer.on('wt-error', (event, message) => {
-          if (message.indexOf('duplicate') > -1) {
+          if (typeof message === 'string' && message.indexOf('duplicate') > -1) {
             this.toasted('같은 이름의 토렌트가 이미 존재합니다')
           }
           else {
@@ -152,11 +153,12 @@
                 this.toasted('시간초과: 잘못된 마그넷 주소 입니다')
               break
               default:
-                this.toasted('에러')
+                this.toasted(message)
             }
           }
 
           this.loader = false
+          this.fileIsShow = false
         })
       },
       // 토렌트 임시저장소

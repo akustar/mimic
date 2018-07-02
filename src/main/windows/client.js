@@ -8,9 +8,9 @@ const client = {
 
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080/` : `file://${__dirname}/index.html`
 
-function create(store) {
+function create(state) {
   const win = client.win = new BrowserWindow({
-    ...store.get('windowBounds'),
+    ...state.windowBounds,
     title: 'MIMIC',
     minWidth: 360,
     minHeight: 290,
@@ -31,12 +31,14 @@ function create(store) {
 
   win.on('focus', () => win.webContents.send('focus'))
   win.on('blur', () => win.webContents.send('blur'))
+
   win.on('resize', debounce(event => {
-    store.set('windowBounds', event.sender.getBounds())
+    state.windowBounds = Object.assign(state.windowBounds, event.sender.getBounds())
   }, 250))
   win.on('move', debounce(event => {
-    store.set('windowBounds', event.sender.getBounds())
-  }, 250))      
+    state.windowBounds = Object.assign(state.windowBounds, event.sender.getBounds())
+  }, 250))
+
   win.on('close', () => {
     if (process.platform !== 'darwin') app.quit()
   })

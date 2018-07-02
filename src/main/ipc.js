@@ -15,8 +15,8 @@ function init(store, client, webTorrent, streaming) {
 
   // webtorrent -> client
   ipcMain.on('wt-progress', (event, ...args) => client.win.webContents.send('wt-progress', ...args))
+  ipcMain.on('wt-parsed', (event, ...args) => client.win.webContents.send('wt-parsed', ...args))
   ipcMain.on('wt-error', (event, ...args) => client.win.webContents.send('wt-error', ...args))
-  ipcMain.on('wt-parse-result', (event, ...args) => client.win.webContents.send('wt-parse-result', ...args))
   ipcMain.on('wt-duplicate', (event, ...args) => {
     for (const key in webTorrent.list) {
       if (key !== 'identifier') {

@@ -107,14 +107,21 @@ function addTorrentEvents (torrent) {
 }
 
 function parseTorrentFile (paths) {
-  const parse = paths.map(path => {
-    const parse = parseTorrent(fs.readFileSync(path))
-    parse.torrentId = parse.infoHash
-    parse.selections = new Array(parse.files.length).fill(true)
-    return parse
-  })
-  
-  ipcRenderer.send('wt-parse-result', parse)
+  const parsed = paths.reduce((parsed, path) => {
+    try {
+      let parse = parseTorrent(fs.readFileSync(path))
+      parse.selections = new Array(parse.files.length).fill(true)
+      parse.torrentId = parse.infoHash
+
+      parsed.push(parse)
+    } catch (err) {
+      ipcRenderer.send('wt-error', err.message)
+    }
+
+    return parsed
+  }, [])
+
+  if (parsed.length > 0) ipcRenderer.send('wt-parsed', parsed)
 }
 
 // 마그넷 주소 또는 발급번호(미정)를 전달받으면 다운로드를 시작합니다
