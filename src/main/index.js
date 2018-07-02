@@ -6,7 +6,6 @@ import Store from './Store'
 import ipc from './ipc'
 import tray from './tray'
 import menu from './menu'
-import state from '../renderer/lib/state'
 
 const defaults = {
   downloads: app.getPath('downloads'),
