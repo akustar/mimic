@@ -254,6 +254,14 @@ function getTorrentFileInfo (file) {
 function stopTorrent (torrentKey, isAll = '') {
   const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
   const summary = torrentSummary[torrentKey]
+
+  // summary가 존재하지 않으면 아직 토렌트 연결이 안됀걸로 판단
+  
+  if (!summary) {
+    console.log('여기로 와야함')
+    currentWindow.close()
+  }
+
   const {infoHash, downloadPath, name, torrentFilePath, posterFilePath} = summary
   const torrent = client.get(infoHash)
   const downloadFilePath = path.join(downloadPath, name)

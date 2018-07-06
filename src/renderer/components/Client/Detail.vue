@@ -68,8 +68,9 @@
         ipcRenderer.send('wt-select-files', this.torrentKey, this.summary.infoHash, this.summary.selections)
       },
       openFile(file, fileIndex) {
+        const openExternalPlayer  = ipcRenderer.sendSync('get', 'openExternalPlayer')
         // 재생할 수 있는 파일인지 확인합니다.
-        if (fileExtension.isPlayable(file)) {
+        if (fileExtension.isPlayable(file) && !openExternalPlayer) {
           ipcRenderer.send('wt-start-streaming', this.torrentKey, this.summary.infoHash, file.name, fileIndex)
         }
         // 재생 파일이 아닌 경우

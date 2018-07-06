@@ -13,6 +13,7 @@ const defaults = {
     width: 400,
     height: 640
   },
+  openExternalPlayer: false,
   torrents: {}
 }
 const store = new Store(defaults)

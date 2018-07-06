@@ -22,19 +22,19 @@
                         <input type="checkbox" id="checkbox-slider-2">
                         <label for="checkbox-slider-2"></label>
                       </div>
-                    </div>                  
+                    </div>
                   </dd>
-                </dl>                
+                </dl>           
                 <dl>
                   <dt>폴더</dt>
                   <dd>
                     <div class="settings-box">
                       <div>
                         <strong>저장 위치</strong>
-                        <span>C:\Users\장준혁\Downloads</span>
+                        <span>{{ downloads }}</span>
                       </div>
-                      <button type="button" class="button-filled-black">위치 지정하기</button>
-                    </div>                  
+                      <button type="button" class="button-filled-black" @click="setDownloads">위치 지정하기</button>
+                    </div>
                   </dd>
                 </dl>
                 <dl>
@@ -42,16 +42,16 @@
                   <dd>
                     <div class="settings-box">
                       <div>
-                        <strong>내장 플레이어 사용</strong>
-                        <span>스트리밍에 필요한 플레이어를 사용합니다</span>
+                        <strong>외부 플레이어 사용</strong>
+                        <span>기본 앱으로 미디어를 재생합니다</span>
                       </div>
                       <div class="checkbox-slider">
-                        <input type="checkbox" id="checkbox-slider-1" checked>
+                        <input type="checkbox" id="checkbox-slider-1" v-model="openExternalPlayer" @change="setOpenExternalPlayer">
                         <label for="checkbox-slider-1"></label>
                       </div>
-                    </div>                  
+                    </div>
                   </dd>
-                </dl>                           
+                </dl>
               </div>
             </div>
             <div class="modal-footer">
@@ -65,9 +65,37 @@
 </template>
 
 <script>
+  import { ipcRenderer, remote } from 'electron'
+
   export default {
     name: 'Preferences',
+    data() {
+      return {
+        downloads: ipcRenderer.sendSync('get', 'downloads'),
+        openExternalPlayer: ipcRenderer.sendSync('get', 'openExternalPlayer')
+      }
+    },
     methods: {
+      // 다운로드 위치를 설정합니다
+      setDownloads (fileName) {
+        const win = remote.getCurrentWindow()
+        const options = {
+          title: '다운로드할 위치를 지정하세요',
+          defaultPath: this.downloads,
+          properties: ['openFile', 'openDirectory']
+        }
+        remote.dialog.showOpenDialog(win, options, paths => {
+          if (!Array.isArray(paths)) return
+
+          this.downloads = paths[0]
+          
+          ipcRenderer.send('set', 'downloads', this.downloads)
+        })
+      },
+      setOpenExternalPlayer (event) {
+        this.openExternalPlayer = event.target.checked
+        ipcRenderer.send('set', 'openExternalPlayer', this.openExternalPlayer)
+      },
       close() {
         this.$emit('close')
       }

@@ -75,25 +75,15 @@
         this.$toasted.show('클립보드에 링크가 복사 되었습니다')
       },
       stopTorrent() {
-        const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
-        const summary = torrentSummary[this.torrentKey]
-
-        if (!summary) return
-             
         // 토렌트가 삭제되기까지 약간의 시간이 걸리므로 뷰에서 미리 삭제된 모습을 보여줍니다
         this.$emit('stopTorrent', this.torrentKey)
         // 실제 삭제 요청
         ipcRenderer.send('wt-stop-torrent', this.torrentKey)
       },
       removeTorrent() {
-        const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
-        const summary = torrentSummary[this.torrentKey]
-
-        if (!summary) return
-
         // 토렌트가 삭제되기까지 약간의 시간이 걸리므로 뷰에서 미리 삭제된 모습을 보여줍니다
         this.$emit('stopTorrent', this.torrentKey)
-        // 실제 삭제 요청
+        // 실제 삭제 요청 
         ipcRenderer.send('wt-stop-torrent', this.torrentKey, 'all')
       }
     }
