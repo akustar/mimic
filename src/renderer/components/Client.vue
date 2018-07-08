@@ -111,10 +111,10 @@
           const {infoHash, downloadPath, selections, torrentFilePath, posterFilePath} = summary
 
           // 포스터 파일이 존재하는지 체크
-          fs.stat(posterFilePath, (error) => { if (error) summary.posterFilePath = '' })
+          fs.stat(posterFilePath || '', (error) => { if (error) summary.posterFilePath = '' })
 
           // 토렌트 파일이 존재하는지 체크
-          fs.stat(torrentFilePath, (error) => {
+          fs.stat(torrentFilePath || '', (error) => {
             const torrentId = !error ? torrentFilePath : infoHash
 
             // 토렌트가 연결되기 까지 시간이 걸리므로 저장해 둔 토렌트 정보를 먼저 보여줍니다

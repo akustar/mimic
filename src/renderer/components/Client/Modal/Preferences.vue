@@ -24,7 +24,7 @@
                       </div>
                     </div>
                   </dd>
-                </dl>           
+                </dl>
                 <dl>
                   <dt>폴더</dt>
                   <dd>

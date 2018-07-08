@@ -8,9 +8,9 @@
         <i class="material-icons md-24">link</i>
       </button>
       <div class="separator"></div>
-      <button title="발급 번호"  @click.stop v-tippy="{placement: 'bottom', distance: 5}" class="torrentKey-number">
+      <!-- <button title="발급 번호"  @click.stop v-tippy="{placement: 'bottom', distance: 5}" class="torrentKey-number">
         <i># </i><span>367 057</span>
-      </button>
+      </button> -->
     </div>
     <div>
       <button type="button" @click.stop v-tippy="{
