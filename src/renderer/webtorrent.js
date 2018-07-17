@@ -26,6 +26,8 @@ function init () {
   ipcRenderer.on('wt-start-torrent', (event, ...args) => startTorrent(...args))
   ipcRenderer.on('wt-create-torrent', (event, ...args) => createTorrent(...args))
   ipcRenderer.on('wt-identifier-torrent', (event, ...args) => identifierTorrent(...args))
+  ipcRenderer.on('wt-pause-torrent', (event, ...args) => pauseTorrent(...args))
+  ipcRenderer.on('wt-resume-torrent', (event, ...args) => resumeTorrent(...args))
   ipcRenderer.on('wt-parse-torrent', (event, ...args) => parseTorrentFile(...args))
   ipcRenderer.on('wt-duplicate-torrent', (event, ...args) => duplicateTorrent(...args))
   ipcRenderer.on('wt-stop-torrent', (event, ...args) => stopTorrent(...args))
@@ -36,12 +38,13 @@ function init () {
   setInterval(updateTorrentProgress, 1000)
 }
 
-function startTorrent (torrentKey, torrentId, downloadPath, selections, posterFilePath) {
+function startTorrent (torrentKey, torrentId, downloadPath, selections, isPause, posterFilePath) {
   const torrent = client.add(torrentId, {
     path: downloadPath
   })
   torrent.key = torrentKey
   torrent.selections = selections
+  torrent.isPause = isPause
   fs.stat(posterFilePath || '', (error) => {
     if (!error) torrent.posterFilePath = posterFilePath
   })
@@ -91,6 +94,11 @@ function addTorrentEvents (torrent) {
 
     // 다음 재시작을 위해 요약 정보를 파일에 저장합니다.
     ipcRenderer.send('set', 'torrents', torrentSummary)
+
+    // 다운로드가 완료되면 새로운 피어에 연결하지 않습니다(배포안함)
+    if (torrent.isPause) {
+      pauseTorrent(torrent)
+    }
   }
 
   function error (message) {
@@ -103,6 +111,30 @@ function addTorrentEvents (torrent) {
 
   function warning(message) {
     console.log('wt-warning: ', message)
+  }
+}
+
+function pauseTorrent () {
+  const torrent = client.torrents[0]
+  if (torrent) {
+    torrent.isPause = true
+    torrent.pause()
+
+    const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
+    torrentSummary[torrent.key].isPause = torrent.isPause
+    ipcRenderer.send('set', 'torrents', torrentSummary)
+  }
+}
+
+function resumeTorrent () {
+  const torrent = client.torrents[0]
+  if (torrent) {
+    torrent.isPause = false
+    torrent.resume()
+
+    const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
+    torrentSummary[torrent.key].isPause = torrent.isPause
+    ipcRenderer.send('set', 'torrents', torrentSummary)
   }
 }
 
@@ -223,6 +255,7 @@ function getTorrentProgress () {
     uploadSpeed: torrent.uploadSpeed,
     numPeers: torrent.numPeers,
     posterFilePath: torrent.posterFilePath,
+    isPause: torrent.isPause,
     length: torrent.length,
     bitfield: torrent.bitfield
   }
@@ -234,6 +267,7 @@ function getTorrentInfo (torrent) {
     infoHash: torrent.infoHash,
     magnetURI: torrent.magnetURI,
     name: torrent.name,
+    isPause: torrent.isPause,
     downloadPath: torrent.path,
     selections: torrent.selections,
     files: torrent.files.map(getTorrentFileInfo),

@@ -23,10 +23,10 @@
                     <div class="settings-box">
                       <div>
                         <strong>배포안함</strong>
-                        <span>다운로드 완료 후 토렌트를 자동으로 삭제합니다</span>
+                        <span>다운로드 완료 후 업로드를 진행하지 않습니다</span>
                       </div>
                       <div class="checkbox-slider">
-                        <input type="checkbox" :id="'checkbox-slider-' + index">
+                        <input type="checkbox" :id="'checkbox-slider-' + index" v-model="isPause">
                         <label :for="'checkbox-slider-' + index"></label>
                       </div>
                     </div>
@@ -118,6 +118,7 @@
     data () {
       return {
         isAllSelected: true,
+        isPause: false,
         downloads: ipcRenderer.sendSync('get', 'downloads')
       }
     },
@@ -128,6 +129,7 @@
         const torrentId = torrent.torrentId
         const downloadPath = this.downloads
         const selections = torrent.selections
+        const isPause = this.isPause
         torrent.status = '피어 연결 중'
         torrent.key = torrentKey
         
@@ -139,7 +141,7 @@
         }
 
         // 토렌트 다운로드 시작
-        ipcRenderer.send('wt-start-torrent', torrentKey, torrentId, downloadPath, selections)
+        ipcRenderer.send('wt-start-torrent', torrentKey, torrentId, downloadPath, selections, isPause)
         // 토렌트가 연결되기 까지 시간이 걸리므로 연결되지않은 토렌트 정보를 먼저 보여줍니다
         this.tempTorrent(torrent)
         // 모달을 닫습니다

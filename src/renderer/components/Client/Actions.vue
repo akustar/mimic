@@ -13,7 +13,7 @@
       </button> -->
     </div>
     <div>
-      <button type="button" @click.stop v-tippy="{
+      <button type="button" @click.stop="dropDown" v-tippy="{
           html: '#wt-dropdown-'+torrentKey,
           trigger: 'click',
           placement: 'bottom-end',
@@ -24,12 +24,12 @@
       </button>
       <div :id="'wt-dropdown-'+torrentKey">
         <div class="dropdown">
-          <button type="button" data-tippy-close="true" @click="shareTorrent">공유 링크 클립보드 복사</button>
           <button type="button" data-tippy-close="true" @click="stopTorrent">토렌트 삭제</button>
           <button type="button" data-tippy-close="true" @click="removeTorrent">데이터와 토렌트 둘다 삭제</button>  
-          <button type="button" data-tippy-close="true" class="disabled">재시작</button>
-          <button type="button" data-tippy-close="true">일시정지</button>
+          <button type="button" data-tippy-close="true" v-if="!isPause" @click="pauseTorrent">배포 안함</button>
+          <button type="button" data-tippy-close="true" v-else @click="resumeTorrent">배포 시작</button>
           <button type="button" data-tippy-close="true" @click="openDirectory">저장된 폴더 열기</button>
+          <button type="button" data-tippy-close="true" @click="shareTorrent">공유 링크 클립보드 복사</button>
         </div>
       </div>
     </div>
@@ -44,11 +44,30 @@
   export default {
     name: 'Actions',
     props: ['torrentKey'],
+    data() {
+      return {
+        isPause: false
+      }
+    },
     methods: {
+      dropDown () {
+        const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
+        const summary = torrentSummary[this.torrentKey]
+        if (!summary) return
+
+        this.isPause = summary.isPause
+      },
+      pauseTorrent () {
+        this.isPause = true
+        ipcRenderer.send('wt-pause-torrent', this.torrentKey)
+      },
+      resumeTorrent () {
+        this.isPause = false
+        ipcRenderer.send('wt-resume-torrent', this.torrentKey)
+      },
       openDirectory() {
         const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
         const summary = torrentSummary[this.torrentKey]
-
         if (!summary) return
         
         setTimeout(() => {
@@ -67,11 +86,14 @@
       shareTorrent() {
         const torrentSummary = ipcRenderer.sendSync('get', 'torrents')
         const summary = torrentSummary[this.torrentKey]
-
         if (!summary) return
 
-        clipboard.writeText(`https://instant.io/#${summary.infoHash}`)
+        // 배포중이 아니라면 배포 시작
+        if (summary.isPause) ipcRenderer.send('wt-resume-torrent', this.torrentKey)
 
+        // 클립보드에 공유 링크 복사
+        clipboard.writeText(`http://localhost:8080/streaming?torrentId=${summary.infoHash}`)
+        // 메시지 알림
         this.$toasted.show('클립보드에 링크가 복사 되었습니다')
       },
       stopTorrent() {

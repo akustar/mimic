@@ -108,7 +108,7 @@
 
         for (const torrentKey in torrentSummary) {
           const summary = torrentSummary[torrentKey]
-          const {infoHash, downloadPath, selections, torrentFilePath, posterFilePath} = summary
+          const {infoHash, downloadPath, selections, torrentFilePath, isPause, posterFilePath} = summary
 
           // 포스터 파일이 존재하는지 체크
           fs.stat(posterFilePath || '', (error) => { if (error) summary.posterFilePath = '' })
@@ -122,7 +122,7 @@
             this.tempTorrent(summary)
 
             // 토렌트 다운로드 시작
-            ipcRenderer.send('wt-start-torrent', torrentKey, torrentId, downloadPath, selections, posterFilePath)
+            ipcRenderer.send('wt-start-torrent', torrentKey, torrentId, downloadPath, selections, isPause, posterFilePath)
           })
         }
       },

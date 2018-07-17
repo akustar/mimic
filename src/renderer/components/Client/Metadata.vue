@@ -37,7 +37,19 @@
         return (persent || 0).toFixed(1)
       },
       status() {
-        return this.torrent.status || (this.torrent.progress === 1 ? '업로드 중' : '다운로드 중')
+        // 다운로드가 완료됐을때
+        if (this.torrent.progress === 1) {
+          // 배포안함 상태인 경우
+          if (this.torrent.isPause) {
+            return '다운로드 완료'
+          }
+          else {
+            return '업로드 중'
+          }
+        }
+        else {
+          return '다운로드 중'
+        }
       },
       numPeers() {
         return this.torrent.numPeers || 0

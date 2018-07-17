@@ -7,9 +7,11 @@ function init(store, client, webTorrent, streaming) {
 
   // client -> webtorrent
   ipcMain.on('wt-start-torrent', (event, ...args) => webTorrent.create('wt-start-torrent', ...args))
-  ipcMain.on('wt-create-torrent', (event, ...args) => webTorrent.create('wt-create-torrent', ...args))
+  ipcMain.on('wt-create-torrent', (event, ...args) => webTorrent.create('wt-create-torrent', ...args))  
   ipcMain.on('wt-parse-torrent', (event, ...args) => webTorrent.list['identifier'].webContents.send('wt-parse-torrent', ...args))
   ipcMain.on('wt-identifier-torrent', (event, ...args) => webTorrent.list['identifier'].webContents.send('wt-identifier-torrent', ...args))
+  ipcMain.on('wt-pause-torrent', (event, torrentKey, ...args) => webTorrent.list[torrentKey].webContents.send('wt-pause-torrent', ...args))
+  ipcMain.on('wt-resume-torrent', (event, torrentKey, ...args) => webTorrent.list[torrentKey].webContents.send('wt-resume-torrent', ...args))  
   ipcMain.on('wt-stop-torrent', (event, torrentKey, ...args) => webTorrent.list[torrentKey].webContents.send('wt-stop-torrent', torrentKey, ...args))
   ipcMain.on('wt-select-files', (event, torrentKey, ...args) => webTorrent.list[torrentKey].webContents.send('wt-select-files', ...args))
 
@@ -32,8 +34,7 @@ function init(store, client, webTorrent, streaming) {
   ipcMain.on('wt-stop-server', (event, torrentKey, ...args) => webTorrent.list[torrentKey].webContents.send('wt-stop-server', ...args))
   ipcMain.on('wt-server-running', (event, index, ...args) => streaming.list[index].webContents.send('wt-server-running', ...args))
   ipcMain.on('wt-loading-parts', (event, index, ...args) => streaming.list[index].webContents.send('wt-loading-parts', ...args))
-  
-  
+    
   // 타이틀바
   ipcMain.on('win-minimize', () => client.win.minimize())
   ipcMain.on('win-maximize', () => {

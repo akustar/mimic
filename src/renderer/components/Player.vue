@@ -371,13 +371,28 @@
           this.$refs.media.removeChild(this.$refs.media.firstChild)
         }
 
+        try {
+          track.src = subtitles.buffer(path)
+        } catch (err) {
+          this.$toasted.show('자막 파일 에러', {
+            type : 'error',
+            duration: 0,
+            action: {
+              text: '확인',
+              onClick: (event, toastObject) => {
+                toastObject.goAway(0)
+              }
+            }
+          })
+
+          return 
+        }
         track.label = 'Subtitles'
         track.type = 'subtitles'
         track.kind='captions'
         track.mode = 'showing'
         track.default = true
-        track.src = subtitles.buffer(path)
-
+        
         this.$refs.media.appendChild(track)
 
         this.sendMessage('자막 추가 됨')
