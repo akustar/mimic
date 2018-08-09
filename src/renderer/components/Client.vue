@@ -29,7 +29,7 @@
         <actions :torrentKey="torrentKey" @stopTorrent="stopTorrent"></actions>
 
         <!-- 디테일 -->
-        <detail v-if="currentKey === torrentKey" :torrentKey="torrentKey" :fileProg="torrent.fileProg"></detail>        
+        <detail v-if="currentKey === torrentKey" :torrentKey="torrentKey" :fileProg="torrent.fileProg"></detail>
       </div>
   
       <!-- 모달: 토렌트 파일 추가 -->
