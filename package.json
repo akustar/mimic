@@ -30,6 +30,7 @@
     "jschardet": "^1.6.0",
     "material-design-icons": "^3.0.1",
     "mkdirp": "^0.5.1",
+    "pretty-bytes": "^5.1.0",
     "string-similarity": "^1.2.0",
     "trash": "^4.3.0",
     "vue": "^2.3.3",
