@@ -17,16 +17,9 @@
     },    
     mounted () {
       this.setupIpc()
-      this.initEvents()
+      this.addEventListeners()
     },
     methods: {
-      initEvents () {
-        document.addEventListener('click', event => {
-          if (event.target.dataset.tippyClose) {
-            document.body.click()
-          }
-        })
-      },
       setupIpc () {
         ipcRenderer.on('focus', () => this.unfocused = false)
         ipcRenderer.on('blur', () => {
@@ -34,7 +27,14 @@
 
           document.body.click()
         })
-      }
+      },
+      addEventListeners () {
+        document.addEventListener('click', event => {
+          if (event.target.dataset.tippyClose) {
+            document.body.click()
+          }
+        })
+      },      
     },
     components: {
       Client
