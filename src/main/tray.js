@@ -9,8 +9,8 @@ function create() {
   if (process.platform !== 'win32') return
   
   const image = nativeImage.createFromPath(getIconPath())
-  tray = new Tray(image)
 
+  tray = new Tray(image)
   tray.on('click', () => client.win.show())
 
   updateTrayMenu()
@@ -22,7 +22,7 @@ function updateTrayMenu() {
   tray.setContextMenu(contextMenu)
 }
 
-function getMenuTemplate () {
+function getMenuTemplate() {
   return [
     {
       label: '종료',

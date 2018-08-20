@@ -4,8 +4,8 @@ import client from './windows/client'
 let menu = null
 
 function init () {
-  menu = electron.Menu.buildFromTemplate(getMenuTemplate())
-  electron.Menu.setApplicationMenu(menu)
+	menu = electron.Menu.buildFromTemplate(getMenuTemplate())
+	electron.Menu.setApplicationMenu(menu)
 }
 
 function getMenuTemplate () {
@@ -21,7 +21,37 @@ function getMenuTemplate () {
 					click: () => client.win.toggleDevTools()
 				}
 			]
-		}
+		},
+    {
+      label: 'Edit',
+      submenu: [
+        {
+          role: 'undo'
+        },
+        {
+          role: 'redo'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'cut'
+        },
+        {
+          role: 'copy'
+        },
+        {
+          label: 'Paste Torrent Address',
+					role: 'paste'
+        },
+        {
+          role: 'delete'
+        },
+        {
+          role: 'selectall'
+        }
+      ]
+    }
 	]
 }
 

@@ -98,7 +98,7 @@
         }
       }
     },
-    mounted() {
+    mounted () {
       // 드래그 앤 드롭으로 업로드 된 경우
       if (this.seedPath) {
         const stats = fs.lstatSync(this.seedPath)
@@ -112,7 +112,7 @@
       }   
     },
     methods: {
-      openFileDialog() {
+      openFileDialog () {
         const options = {
           title: '파일 선택',
           properties: ['openFile']
@@ -123,7 +123,7 @@
           this.updateFileOptions(paths[0])
         })
       },
-      openFolderDialog() {
+      openFolderDialog () {
         const options = {
           title: '폴더 선택',
           properties: ['openDirectory']
@@ -134,25 +134,27 @@
           this.updateFolderOptions(paths[0])
         })
       },
-      updateFileOptions(filePath) {
+      updateFileOptions (filePath) {
         this.options.name = path.basename(filePath)
         this.options.path = filePath
         this.options.selections.push(true)
       },      
-      updateFolderOptions(folderPath) {
+      updateFolderOptions (folderPath) {
         this.options.name = path.basename(folderPath)
         this.options.path = folderPath
         countFiles(folderPath, (error, {files}) => {
           while (files--) this.options.selections.push(true)
         })
       },
-      confirm() {
+      confirm () {
         const announceList = this.options.trackers
           .split('\n')
           .map(s => s.trim())
           .filter(s => s !== '')
+        const torrentKey = this.uniqueKey()
+
         const options = {
-          torrentKey: this.uniqueKey(),
+          torrentKey,
           name: this.options.name,
           announce: announceList,
           private: this.options.isPrivate,
@@ -160,17 +162,28 @@
           selections: this.options.selections
         }
 
-        ipcRenderer.send('wt-create-torrent', this.options.path, options)
+        // 토렌트 다운로드 시작
+        ipcRenderer.send('wt-create-torrent', torrentKey, this.options.path, options)
+        // 토렌트가 연결되기 까지 시간이 걸리므로 연결되지않은 토렌트 정보를 먼저 보여줍니다
+        this.tempTorrent({
+          name: this.options.name,
+          key: torrentKey,
+          status: '연결 대기 중'
+        })
+        // 모달을 닫습니다
         this.close()
       },
-      close() {
+      close () {
         this.$emit('close')
       },
       // From: https://stackoverflow.com/a/38872723
-      revisedRandId() {
+      revisedRandId () {
         return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
+      },
+      tempTorrent (torrent) {
+        this.$emit('tempTorrent', torrent)
       },      
-      uniqueKey() {
+      uniqueKey () {
         const randomKey = this.revisedRandId()
         const savedTorrents = ipcRenderer.sendSync('get', 'torrents')
         if (savedTorrents[randomKey]) {

@@ -14,19 +14,13 @@
 </template>
 
 <script>
+  import prettyBytes from '@/lib/pretty-bytes'
+
   export default {
     name: 'metadata',
     props: ['torrent'],
     methods: {
-      prettyBytes(num = 0) {
-        let exponent, unit, neg = num < 0, units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        if (neg) num = -num
-        if (!num || num < 1) return (neg ? '-' : '') + num + 'B'
-        exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1)
-        num = Number((num / Math.pow(1000, exponent)).toFixed(2))
-        unit = units[exponent]
-        return (neg ? '-' : '') + num + unit
-      }
+      prettyBytes
     },
     computed: {
       name() {
@@ -37,7 +31,19 @@
         return (persent || 0).toFixed(1)
       },
       status() {
-        return this.torrent.progress === 1 ? '업로드 중' : '다운로드 중'
+        // 다운로드가 완료됐을때
+        if (this.torrent.progress === 1) {
+          // 배포안함 상태인 경우
+          if (this.torrent.isPause) {
+            return '다운로드 완료'
+          }
+          else {
+            return '업로드 중'
+          }
+        }
+        else {
+          return '다운로드 중'
+        }
       },
       numPeers() {
         return this.torrent.numPeers || 0
@@ -62,10 +68,12 @@
   .metadata {
     padding: 20px 15px 0;
   }
+  .poster .metadata > div {
+    color: #fff;
+  }
   .metadata > div {
     width: 100%;
     line-height: 24px;
-    color: rgba(255,255,255,0.7); 
   }
   .metadata .name {
     font-size: 15px;

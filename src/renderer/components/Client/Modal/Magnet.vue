@@ -57,16 +57,19 @@
           const parse = parseTorrent(torrentId)
           ipcRenderer.send('wt-identifier-torrent', this.torrentId.trim())
 
-          this.$emit('close')
-          this.$emit('loader')
+          this.close()
+          this.loader()
         }
         catch (error) {
           this.error = true
         }
-      },
+      },      
       // 모달컴포넌트를 닫습니다
-      close() {
+      close () {
         this.$emit('close')
+      },
+      loader () {
+        this.$emit('loader')        
       }
     }
   }

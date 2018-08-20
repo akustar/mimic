@@ -2,12 +2,12 @@ import { BrowserWindow } from 'electron'
 
 const streaming = {
   create,
-  win: []
+  list: []
 }
 
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080/streaming.html` : `file://${__dirname}/streaming.html`
 
-function create(webTorrent, ...args) {
+function create(webTorrent, torrentKey, ...args) {
   const win = new BrowserWindow({
     width: 1000,
     height: 600,
@@ -22,30 +22,30 @@ function create(webTorrent, ...args) {
     }    
   })
 
-  const winIndex = streaming.win.length
+  const index = streaming.list.length
 
-  streaming.win.push(win)
+  streaming.list.push(win)
   
   win.loadURL(winURL)
 
   win.once('ready-to-show', () => win.show())
 
   win.webContents.on('will-navigate', (event) => event.preventDefault())
-  win.webContents.on('did-finish-load', (event) => win.webContents.send('did-finish-load', winIndex, ...args))
+  win.webContents.on('did-finish-load', (event) => win.webContents.send('did-finish-load', torrentKey, index, ...args))
 
   win.on('focus', () => win.webContents.send('focus'))
   win.on('blur', () => win.webContents.send('blur'))
-  win.on('closed', () => {
+  win.on('closed', (event) => {
     // 스트리밍 서버 종료
-    webTorrent.win.webContents.send('wt-stop-server', winIndex)
+    webTorrent.webContents.send('wt-stop-server', index)
 
     destroy(win)
   })
 }
 
 function destroy(win) {
-  const i = streaming.win.indexOf(win)
-  if (i > -1) streaming.win.splice(i, 1)
+  const i = streaming.list.indexOf(win)
+  if (i > -1) streaming.list.splice(i, 1)
   win = null
 }
 

@@ -33,7 +33,8 @@
 <script>
   import { ipcRenderer,shell } from 'electron'
   import path from 'path'
-  import fileExtension from '../../lib/file-extension'
+  import fileExtension from '@/lib/file-extension'
+  import prettyBytes from '@/lib/pretty-bytes'
 
   export default {
     name: 'Detail',
@@ -49,44 +50,36 @@
       this.summary = this.torrentSummary[this.torrentKey]
     },
     methods: {
-      fileType(file) {
+      fileType (file) {
         if (fileExtension.isVideo(file)) return 'videocam'
         else if (fileExtension.isAudio(file)) return 'music_note'
         else if (fileExtension.isImage(file)) return 'insert_photo'
         else return 'description'
       },
-      progress(fileIndex) {
+      progress (fileIndex) {
         const { numPiecesPresent, numPieces } = this.fileProg[fileIndex]
         if (numPiecesPresent && numPieces) {
           return Math.round(100 * numPiecesPresent / numPieces) + '%'
         }
       },
-      selectFiles(fileIndex) {
+      selectFiles (fileIndex) {
         this.summary.selections[fileIndex] = !this.summary.selections[fileIndex]
 
         ipcRenderer.send('set', 'torrents', this.torrentSummary)
-        ipcRenderer.send('wt-select-files', this.summary.infoHash, this.summary.selections)
+        ipcRenderer.send('wt-select-files', this.torrentKey, this.summary.infoHash, this.summary.selections)
       },
-      openFile(file, fileIndex) {
+      openFile (file, fileIndex) {
+        const openExternalPlayer  = ipcRenderer.sendSync('get', 'openExternalPlayer')
         // 재생할 수 있는 파일인지 확인합니다.
-        if (fileExtension.isPlayable(file)) {
-          ipcRenderer.send('wt-create-streaming', this.summary.infoHash, file.name, fileIndex, this.torrentKey)
+        if (fileExtension.isPlayable(file) && !openExternalPlayer) {
+          ipcRenderer.send('wt-start-streaming', this.torrentKey, this.summary.infoHash, file.name, fileIndex)
         }
         // 재생 파일이 아닌 경우
-        // 실행을 시킬지 폴더만 열어줄지..
         else {
-          shell.showItemInFolder(path.join(this.summary.path, file.path))
+          shell.openExternal(path.join(this.summary.downloadPath, file.path))
         }
       },
-      prettyBytes(num = 0) {
-        let exponent, unit, neg = num < 0, units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        if (neg) num = -num
-        if (num < 1) return (neg ? '-' : '') + num + 'B'
-        exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1)
-        num = Number((num / Math.pow(1000, exponent)).toFixed(2))
-        unit = units[exponent]
-        return (neg ? '-' : '') + num + unit
-      }
+      prettyBytes
     }
   }
 </script>
@@ -95,6 +88,9 @@
   .detail .checkbox-slider{
     display: block;
     margin-left: auto;
+  }
+  .detail button {
+    color: #fff;
   }
   .detail .table table {
     table-layout: fixed
@@ -121,5 +117,8 @@
   }
   .detail .table table tbody tr:hover {
     background-color: rgba(0,0,0,.3);
+  }
+  .poster .detail .table table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 </style>

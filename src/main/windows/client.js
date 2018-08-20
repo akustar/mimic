@@ -32,12 +32,14 @@ function create (store) {
 
   win.on('focus', () => win.webContents.send('focus'))
   win.on('blur', () => win.webContents.send('blur'))
+
   win.on('resize', debounce(event => {
     store.set('windowBounds', event.sender.getBounds())
   }, 250))
   win.on('move', debounce(event => {
     store.set('windowBounds', event.sender.getBounds())
-  }, 250))      
+  }, 250))
+
   win.on('close', () => {
     if (process.platform !== 'darwin') app.quit()
   })

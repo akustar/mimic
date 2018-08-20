@@ -1,5 +1,6 @@
 import os from 'os'
 import path from 'path'
+import electron from 'electron'
 
 function darwin (name) {
   return path.join(process.env['HOME'], 'Library', 'Application Support', name)
@@ -21,6 +22,19 @@ function win32 (name) {
   return path.join(process.env['USERPROFILE'], 'Local Settings', 'Application Data', name)
 }
 
+function getPath (key) {
+  if (!process.versions.electron) {
+    // Node.js process
+    return ''
+  } else if (process.type === 'renderer') {
+    // Electron renderer process
+    return electron.remote.app.getPath(key)
+  } else {
+    // Electron main process
+    return electron.app.getPath(key)
+  }
+}
+
 function applicationConfigPath (name) {
   if (typeof name !== 'string') {
     throw new TypeError('`name` must be string')
@@ -35,7 +49,7 @@ function applicationConfigPath (name) {
   throw new Error('Platform not supported')
 }
 
-const APP_NAME = 'mimic-desktop'
+const APP_NAME = require('../package.json').name
 const appConfigPath = applicationConfigPath(APP_NAME)
 
 export default {
@@ -44,5 +58,6 @@ export default {
   APP_ICON: path.join(__dirname, '..', 'build/icons', 'icon'),
   CONFIG_PATH: appConfigPath,
   POSTER_PATH: path.join(appConfigPath, 'Posters'),
-  TORRENT_PATH: path.join(appConfigPath, 'Torrents')
+  TORRENT_PATH: path.join(appConfigPath, 'Torrents'),
+  DEFAULT_DOWNLOAD_PATH: getPath('downloads')
 }

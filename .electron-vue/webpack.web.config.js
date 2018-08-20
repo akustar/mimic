@@ -81,16 +81,6 @@ let webConfig = {
       },
       nodeModules: false
     }),
-    new HtmlWebpackPlugin({
-      filename: 'webtorrent.html',
-      template: path.resolve(__dirname, '../src/webtorrent.ejs'),
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true
-      },
-      nodeModules: false
-    }),  
     new webpack.DefinePlugin({
       'process.env.IS_WEB': 'true'
     }),
