@@ -1,6 +1,6 @@
 <template>
 	<div class="titlebar" @mousedown="mouseDown">
-		<component :isFullScreen.sync="isFullScreen" :is="platform" />
+		<component :is="platform" :mediaName="mediaName" @fullScreen="fullScreen" />
 	</div>
 </template>
 
@@ -10,7 +10,7 @@ import Darwin from './Titlebar/Darwin'
 import Win32 from './Titlebar/Win32'
 
 export default {
-	props: ['mediaName', 'isFullScreen'],
+	props: ['mediaName'],
 	data () {
 		return {
 			platform: process.platform,
@@ -48,6 +48,9 @@ export default {
 		},
 		mouseUp () {
 			this.isDragging = false
+		},
+		fullScreen (isFullScreen) {
+			this.$emit('update:isFullScreen', !isFullScreen)
 		}
 	},
 	components: {
@@ -58,6 +61,9 @@ export default {
 </script>
 
 <style>
+.titlebar {
+	transition: opacity .25s ease-out;
+}
 .titlebar > div {
 	display: flex;
 	align-items: center;
@@ -66,7 +72,5 @@ export default {
 	height: 22px;
 	z-index: 9999;
 	background-color: #202225;
-	-webkit-app-region: drag;
-	pointer-events: none;
 }
 </style>

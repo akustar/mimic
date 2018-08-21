@@ -1,6 +1,13 @@
 <template>
   <div class="player" :class="[isMouseOver ? 'transition-in' : 'transition-out', {'no-cursor': noCursor}]">
-    <titlebar :mediaName="mediaName" :isFullScreen.sync="isFullScreen" @mouseover.native="isMouseOver = true"></titlebar>
+
+    <titlebar 
+      :mediaName="mediaName"
+      :isFullScreen.sync="isFullScreen"
+      @mouseover.native="isMouseOver = true"
+    >
+    </titlebar>
+
     <div class="mediabox">
       <video
         v-if="localURL"  

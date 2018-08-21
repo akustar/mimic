@@ -20,6 +20,7 @@
   import { ipcRenderer, remote } from 'electron'
 
   export default {
+    props: ['mediaName'],
     data () {
       return {
         win: remote.getCurrentWindow()

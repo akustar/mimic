@@ -35,7 +35,7 @@
         const isFullScreen = this.win.isFullScreen()
         this.win.setFullScreen(!isFullScreen)
 
-        this.$emit('update:isFullScreen', !isFullScreen)
+        this.$emit('fullScreen', isFullScreen)
       }
     }
   }
