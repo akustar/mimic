@@ -47,6 +47,7 @@
     width: 100%;
     height: 4px;
     cursor: ns-resize;
+    -webkit-app-region: no-drag;
   }
 
   .titlebar-buttons {

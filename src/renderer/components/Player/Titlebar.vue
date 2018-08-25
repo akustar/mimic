@@ -10,10 +10,16 @@ import Darwin from './Titlebar/Darwin'
 import Win32 from './Titlebar/Win32'
 
 export default {
-	props: ['mediaName'],
+	props: {
+		mediaName: {
+			type: String,
+			default: ''
+		}
+	},
 	data () {
 		return {
 			platform: process.platform,
+			currentWindow: remote.getCurrentWindow(),
 
 			pageX: 0,
 			pageY: 0,
@@ -40,7 +46,7 @@ export default {
 				const y = event.screenY - this.pageY
 
 				try {
-					remote.BrowserWindow.getFocusedWindow().setPosition(x, y)
+					this.currentWindow.setPosition(x, y)
 				} catch (error) {
 					console.error(error)
 				}
@@ -61,16 +67,17 @@ export default {
 </script>
 
 <style>
-.titlebar {
-	transition: opacity .25s ease-out;
-}
-.titlebar > div {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	height: 22px;
-	z-index: 9999;
-	background-color: #202225;
-}
+	.titlebar {
+		transition: opacity .25s ease-out;
+	}
+
+	.titlebar > div {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: 22px;
+		z-index: 9999;
+		background-color: #202225;
+	}
 </style>

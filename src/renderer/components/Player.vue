@@ -1,6 +1,5 @@
 <template>
   <div class="player" :class="[isMouseOver ? 'transition-in' : 'transition-out', {'no-cursor': noCursor}]">
-
     <titlebar 
       :mediaName="mediaName"
       :isFullScreen.sync="isFullScreen"

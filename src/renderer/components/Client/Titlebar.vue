@@ -23,6 +23,7 @@
 
 <style scoped>
   .titlebar > div {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -31,6 +32,6 @@
     z-index: 9999;
     background-color: #202225;
     -webkit-app-region: drag;
-    pointer-events: none;
+    pointer-events: none;    
   }
 </style>
