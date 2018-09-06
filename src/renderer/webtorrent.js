@@ -237,10 +237,11 @@ function updateTorrentProgress () {
 
 function getTorrentProgress () {
   const torrent = client.torrents[0]
+
   if (!torrent || !torrent.name) return
 
   return {
-    fileProg: torrent.files && torrent.files.map((file, index) => {
+    fileProg: torrent.files && torrent.files.map((file) => {
       const numPieces = file._endPiece - file._startPiece + 1
       let numPiecesPresent = 0
       for (let piece = file._startPiece; piece <= file._endPiece; piece++) {
@@ -297,15 +298,13 @@ function stopTorrent (torrentKey, isAll = '') {
   const summary = torrentSummary[torrentKey]
 
   // summary가 존재하지 않으면 아직 토렌트 연결이 안됀걸로 판단
-  if (!summary) {
-    console.log('여기로 와야함')
-    currentWindow.close()
-  }
+  if (!summary) currentWindow.close()
 
   const {infoHash, downloadPath, name, torrentFilePath, posterFilePath} = summary
   const torrent = client.get(infoHash)
   const downloadFilePath = path.join(downloadPath, name)
   const deleteFiles = [posterFilePath, torrentFilePath]
+
   if (isAll.toUpperCase() === 'ALL') deleteFiles.push(downloadFilePath)
   
   if (torrent) {
@@ -357,7 +356,6 @@ function saveTorrentFile (torrent, identifierCallback) {
         if (error) return console.error('토렌트 파일 저장 실패 %s: %o', torrentFilePath, error)
         console.log('토렌트 파일을 저장하였습니다. %s', torrentFilePath)
 
-        // 이 구문이 중간에 낀다는건 약간 논리적이지 않는듯 함 나중에 좀 더 생각해서 바꿀것
         if (typeof identifierCallback === 'function') return identifierCallback(torrentFilePath)
 
         // 다음 재시작을 위해 요약 정보를 파일에 저장합니다.

@@ -92,7 +92,7 @@
         if (summary.isPause) ipcRenderer.send('wt-resume-torrent', this.torrentKey)
 
         // 클립보드에 공유 링크 복사
-        clipboard.writeText(`https://akustar.github.io/stream/?infohash=${summary.infoHash}`)
+        clipboard.writeText(`https://streaming.now.sh/?infohash=${summary.infoHash}`)
         // 메시지 알림
         this.$toasted.show('클립보드에 링크가 복사 되었습니다')
       },

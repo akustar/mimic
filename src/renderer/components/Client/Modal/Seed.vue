@@ -81,6 +81,7 @@
   import path from 'path'
   import fs from 'fs'
   import countFiles from 'count-files'
+  import uniqueKey from '@/lib/unique-key'
 
   export default {
     name: 'Seed',
@@ -123,6 +124,7 @@
           this.updateFileOptions(paths[0])
         })
       },
+
       openFolderDialog () {
         const options = {
           title: '폴더 선택',
@@ -134,11 +136,13 @@
           this.updateFolderOptions(paths[0])
         })
       },
+
       updateFileOptions (filePath) {
         this.options.name = path.basename(filePath)
         this.options.path = filePath
         this.options.selections.push(true)
-      },      
+      },
+
       updateFolderOptions (folderPath) {
         this.options.name = path.basename(folderPath)
         this.options.path = folderPath
@@ -146,13 +150,16 @@
           while (files--) this.options.selections.push(true)
         })
       },
+
       confirm () {
+        // 파일이 지정되지 않은 경우 모달을 닫습니다
+        if (!this.options.path) return this.close()
+
         const announceList = this.options.trackers
           .split('\n')
           .map(s => s.trim())
           .filter(s => s !== '')
-        const torrentKey = this.uniqueKey()
-
+        const torrentKey = uniqueKey()
         const options = {
           torrentKey,
           name: this.options.name,
@@ -164,35 +171,25 @@
 
         // 토렌트 다운로드 시작
         ipcRenderer.send('wt-create-torrent', torrentKey, this.options.path, options)
+
         // 토렌트가 연결되기 까지 시간이 걸리므로 연결되지않은 토렌트 정보를 먼저 보여줍니다
         this.tempTorrent({
           name: this.options.name,
           key: torrentKey,
           status: '연결 대기 중'
         })
+
         // 모달을 닫습니다
         this.close()
       },
+
       close () {
         this.$emit('close')
       },
-      // From: https://stackoverflow.com/a/38872723
-      revisedRandId () {
-        return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
-      },
+
       tempTorrent (torrent) {
         this.$emit('tempTorrent', torrent)
-      },      
-      uniqueKey () {
-        const randomKey = this.revisedRandId()
-        const savedTorrents = ipcRenderer.sendSync('get', 'torrents')
-        if (savedTorrents[randomKey]) {
-          return this.uniqueKey()
-        }
-        else {
-          return randomKey
-        }
-      }      
+      }
     }
   }
 </script>

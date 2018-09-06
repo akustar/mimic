@@ -1,4 +1,5 @@
-import { app } from 'electron'
+import { app, protocol } from 'electron'
+import Registry from 'winreg'
 import client from './windows/client'
 import webTorrent from './windows/webTorrent'
 import streaming from './windows/streaming'
@@ -26,6 +27,8 @@ app.on('ready', () => {
   tray.create()
 
   ipc.init(store, client, webTorrent, streaming)
+
+  console.log(Registry.HKCU)
 })
 
 app.on('window-all-closed', () => {
