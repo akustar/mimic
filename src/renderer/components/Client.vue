@@ -289,6 +289,7 @@
     flex-direction: column;
     height: 100vh;
   }
+
   .client .header {
     display: flex;
     align-items: center;
@@ -297,21 +298,25 @@
     padding: 0 8px 0 12px;    
     border-bottom: 1px solid #25262a;
   }
+
   .client .main {
     flex: 1 1 0%;
     overflow-y: auto;
     overflow-x: hidden;
   }
+
   .client .torrent {
     position: relative;
     cursor: pointer;
     min-height: 100px;
     border-bottom: 1px solid rgba(114, 118, 126, 0.2);
   }
+
   .client .torrent:hover,
   .client .torrent.isActive {
     background-color: #36393f;
   }
+
   .client .torrent.poster {
     background-repeat: no-repeat;
     background-size: cover;
@@ -320,6 +325,7 @@
     color: #fff;
     text-shadow: rgba(0, 0, 0, 0.5) 0 0 4px;
   }
+  
   .client .torrent.poster .progress {
     background: rgba(255,255,255,0.35);
   }
