@@ -1,9 +1,8 @@
 {
-  "name": "mimic-desktop",
-  "productName": "mimic-desktop",
+  "name": "mimic",
   "version": "0.0.0",
-  "author": "woodfuel <woodfuel@naver.com>",
-  "description": "An electron-vue project",
+  "author": "akustar <akustar.github.io@gmail.com>",
+  "description": "Browser WebTorrent Client",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
