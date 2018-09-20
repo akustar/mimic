@@ -32,7 +32,7 @@
 
 ```bash
 git clone
-cd mimic-desktop
+cd mimic
 yarn # or npm install
 yarn run dev # or npm run dev
 ```
