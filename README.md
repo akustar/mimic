@@ -26,7 +26,7 @@
 * 웹 브라우저에 연결하기 위한 [WebTorrent](https://github.com/webtorrent/webtorrent)프로토콜 지원
 
 ※ 진행 상황: 75%
-실행 영상 [Youtube](https://www.youtube.com/watch?v=ZkS1ClJZkH8)  
+실행 영상 [Youtube-1](https://www.youtube.com/watch?v=ZkS1ClJZkH8), [Youtube-2](https://youtu.be/qh45Dn3q1Fs)
 
 ### 설치
 

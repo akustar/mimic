@@ -60,7 +60,7 @@
           <button type="button" class="control-button" style="transform: rotate(270deg);" @click="fullScreen">
             <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M7,7 L15.2,7 L12.8,9.4 L15.8,12.4 L12.4,15.8 L9.4,12.8 L7,15.2 L7,7 Z M23,23 L14.8,23 L17.2,20.6 L14.2,17.6 L17.6,14.2 L20.6,17.2 L23,14.8 L23,23 Z"></path></svg>
           </button>
-        </div>        
+        </div>
       </div>
     </div>
     <div class="overlay" v-if="isStalled">
